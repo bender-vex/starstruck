@@ -15,7 +15,7 @@ typedef struct PID {
  Default PID struct constructor, used for default parameter value
  These specific values represent a smooth curve with no overshoot
  */
-extern const struct PID DEFAULT_PID;
+extern const PID DEFAULT_PID;
 
 /**
  Gets the output of the input passed through the PID controller for the delta time interval
