@@ -12,7 +12,7 @@ const struct PID DEFAULT_PID = { 5, 3, 3 };
 int pid(int input, int *errorSum, const unsigned long * const deltaTime, int target, PID pid) {
     // Generate error signal
 	int error = target - input;
-    *errorSum += error;
+	*errorSum += error;
 	int dError = error - *errorSum;
 
 	// Compute PID output
