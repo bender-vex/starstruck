@@ -9,14 +9,14 @@ const struct PID DEFAULT_PID = { 5, 3, 3 };
 /**
  Gets the output of the input passed through the PID controller for the delta time interval
  */
-int pid(int input, int *errorSum, const unsigned long * const deltaTime, int target, PID pid) {
+float pid(float input, double *errorSum, float prevError, const unsigned long * const deltaTime, float target, const PID pid) {
     // Generate error signal
-	int error = target - input;
-	*errorSum += error;
-	int dError = error - *errorSum;
+	float error = target - input;
+    *errorSum += error * *deltaTime;
+	float dError = (error - prevError) / *deltaTime;
 
 	// Compute PID output
-	int output = pid.kp * error + pid.ki * *errorSum + pid.kd * dError;
+	float output = pid.kp * error + pid.ki * *errorSum + pid.kd * dError;
 
     return output;
 }

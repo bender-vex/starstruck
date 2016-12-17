@@ -9,7 +9,7 @@ float getDistance(Encoder encoder, float diameter) {
     // Get distance of one rotation and multiply it by the number of rotations
     // the encoder has made
     float dis = PI * diameter;
-    dis *= encoderGet(encoder) % 360;
+    dis *= encoderGet(encoder) / 360;
 
     return dis;
 }

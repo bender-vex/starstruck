@@ -27,10 +27,4 @@
  * so, the robot will await a switch to another mode or disable/enable cycle.
  */
 void autonomous() {
-    int input = 0;
-    int *errorSum = 0;
-    unsigned long *deltaTime = 0;
-
-    int output = pid(input, errorSum, deltaTime, 0, DEFAULT_PID);
-    printf("%i", output);
 }
