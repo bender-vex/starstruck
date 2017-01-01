@@ -1,5 +1,5 @@
 language: c
-sudo: false
+sudo: true
 dist: trusty
 before_install: sudo apt-get install --assume-yes gcc-arm-none-eabi
 script: make
