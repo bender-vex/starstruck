@@ -1,0 +1,5 @@
+language: c
+sudo: true
+dist: trusty
+before_install: sudo bash install-dependencies.sh
+script: make
