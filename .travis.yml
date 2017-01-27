@@ -3,5 +3,5 @@ sudo: true
 dist: trusty
 before_install:
   - sudo apt-get remove g++ 
-  - sudo apt-get install g++ arm-none-eabi-gcc
+  - sudo apt-get install g++ gcc-arm-none-eabi
 script: make
