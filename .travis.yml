@@ -2,5 +2,6 @@ language: c
 sudo: true
 dist: trusty
 before_install:
-    - sudo apt-get install g++-multilib gcc-arm-none-eabi
+    - wget https://github.com/purduesigbots/pros/releases/download/2.11.0/pros-install_ubuntu.sh
+    - ./pros-install_ubuntu.sh
 script: make
