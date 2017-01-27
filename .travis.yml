@@ -1,5 +1,5 @@
 language: c
 sudo: true
 dist: trusty
-before_install: sudo bash install-dependencies.sh
+before_install: sudo apt-get install g++ gcc-arm-none-eabi
 script: make
