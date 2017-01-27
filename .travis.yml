@@ -1,7 +1,5 @@
-language: c
+language: c++
 sudo: true
 dist: trusty
-before_install:
-  - sudo apt-get remove g++ 
-  - sudo apt-get install g++ gcc-arm-none-eabi
+before_install: sudo apt-get install gcc-arm-none-eabi
 script: make
