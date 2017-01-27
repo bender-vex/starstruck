@@ -2,5 +2,5 @@ language: c
 sudo: true
 dist: trusty
 before_install:
-    - sudo apt-get install libstdc++6-4.1-dbg gcc-arm-none-eabi
+    - sudo apt-get install libstdc++6-4.4-dbg gcc-arm-none-eabi
 script: make
