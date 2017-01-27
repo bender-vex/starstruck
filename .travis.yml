@@ -1,5 +1,7 @@
 language: c
 sudo: true
 dist: trusty
-before_install: sudo apt-get install libstdc++6 gcc-arm-none-eabi
+before_install:
+    - sudo apt-get remove libstdc++
+    - sudo apt-get install libstdc++ gcc-arm-none-eabi
 script: make
