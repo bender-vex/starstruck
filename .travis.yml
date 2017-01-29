@@ -2,6 +2,5 @@ language: c
 sudo: true
 dist: trusty
 before_install:
-    - wget https://github.com/purduesigbots/pros/releases/download/2.11.0/pros-install_ubuntu.sh
-    - bash pros-install_ubuntu.sh
-script: pros make
+    - sudo apt-get install gcc-arm-none-eabi=4-8-2014q1-0trusty8
+script: make
