@@ -30,7 +30,10 @@
  * This task should never exit; it should end with some kind of infinite loop, even if empty.
  */
 void operatorControl() {
+	TaskHandle gyroThread = startGyro();
+	extern int heading;
 	while (1) {
+		printf("Gyro heading: %d", heading);
 		delay(20);
 	}
 }

@@ -2,27 +2,29 @@
 #define _GYRO_H_
 
 #include "API.h"
-#include "PID.h"
+
+extern const int GYRO_CHANNEL;
+extern const int GYRO_MULTIPLIER;
+extern const unsigned int FIXED_DELTA_TIME;
 
 /**
- Build the thread the gyro reads from
+ * Starts the gyro sensor and returns a taskhandle for the thread it's read on
  */
 TaskHandle startGyro();
 
 /**
- Close the thread the gyro reads from
+ * Stop and delete the gyro reading thread, reset global variables
  */
 void stopGyro(TaskHandle taskHandle);
 
 /**
- Resets the gyro sensor, effectively setting the current heading to zero
+ * Thread to read the gyro from
  */
-void resetGyro();
+void readGyro();
 
 /**
- Gets the current heading of the gyro in degrees
+ * Must be called after startGyro() has been called, deltaTime is in milliseconds
  */
 void getHeading();
-
 
 #endif
