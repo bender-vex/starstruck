@@ -43,6 +43,8 @@
 // This prevents multiple inclusion, which isn't bad for this file but is good practice
 #define MAIN_H_
 
+#define FIXED_DELTA_TIME 20
+
 #include <API.h>
 #include <PID.h>
 #include <encoder.h>

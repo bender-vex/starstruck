@@ -30,10 +30,15 @@
  * This task should never exit; it should end with some kind of infinite loop, even if empty.
  */
 void operatorControl() {
-	TaskHandle gyroThread = startGyro();
-	extern int heading;
+	Gyro gyro = gyroInit(GYRO_CHANNEL, GYRO_MULTIPLIER);
+	int heading = 0;
+	gyroReset(gyro);
 	while (1) {
-		printf("Gyro heading: %d", heading);
-		delay(20);
+		heading = gyroGet(gyro);
+		printf("Heading: %d\n", heading);
+
+
+
+		delay(FIXED_DELTA_TIME);
 	}
 }
