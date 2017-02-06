@@ -46,6 +46,7 @@
 #include <API.h>
 #include <PID.h>
 #include <encoder.h>
+#include <drive.h>
 
 // Allow usage of this file in C++ programs
 #ifdef __cplusplus
