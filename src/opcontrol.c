@@ -33,11 +33,11 @@ void operatorControl() {
 	Gyro gyro = gyroInit(GYRO_CHANNEL, GYRO_MULTIPLIER);
 	int heading = 0;
 	gyroReset(gyro);
+
+
 	while (1) {
 		heading = gyroGet(gyro);
 		printf("Heading: %d\n", heading);
-
-
 
 		delay(FIXED_DELTA_TIME);
 	}
