@@ -49,6 +49,7 @@
 #include <PID.h>
 #include <encoder.h>
 #include <gyro.h>
+#include <drive.h>
 
 // Allow usage of this file in C++ programs
 #ifdef __cplusplus
