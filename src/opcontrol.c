@@ -39,6 +39,8 @@ void operatorControl() {
 		heading = gyroGet(gyro);
 		printf("Heading: %d\n", heading);
 
+		arcadeDrive();
+
 		delay(FIXED_DELTA_TIME);
 	}
 }
