@@ -4,12 +4,27 @@
 /**
  * Define constants for motor ports
  */
-#define MOTOR_FL 0
-#define MOTOR_FR 1
-#define MOTOR_BL 2
-#define MOTOR_BR 3
+#define MOTOR_FRONT_LEFT 0
+#define MOTOR_FRONT_RIGHT 1
+#define MOTOR_BACK_LEFT 2
+#define MOTOR_BACK_RIGHT 3
 
 /**
  * Use input from joystick to find what the motor outputs should be
  */
 void calculateArcadeDrive(const int movement, const int rotation, int *leftSpeed, int *rightSpeed);
+
+/**
+ * Control the robot's drivetrain with joysticks. This function should be called frequently in teleop.
+ */
+void arcadeDrive();
+
+/**
+ * Set the speed of the motors on the left side of the drivetrain.
+ */
+void setLeftMotors(const int speed);
+
+/**
+ * Set the speed of the motors on the right side of the drivetrain.
+ */
+void setRightMotors(const int speed);
