@@ -29,18 +29,12 @@
  *
  * This task should never exit; it should end with some kind of infinite loop, even if empty.
  */
-void operatorControl() {
-	Gyro gyro = gyroInit(GYRO_CHANNEL, GYRO_MULTIPLIER);
-	int heading = 0;
-	gyroReset(gyro);
-
-
-	while (1) {
-		heading = gyroGet(gyro);
-		printf("Heading: %d\n", heading);
-
-		arcadeDrive();
-
-		delay(FIXED_DELTA_TIME);
+void operatorControl()
+{
+	//initHeadingThread();
+	while (1) 
+	{
+		moveBase(joystickGetAnalog(1,4),joystickGetAnalog(1,3),joystickGetAnalog(1,1));
+		delay(20);
 	}
 }
