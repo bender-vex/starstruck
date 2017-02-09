@@ -45,11 +45,11 @@
 
 #define FIXED_DELTA_TIME 20
 
-#include <API.h>
-#include <PID.h>
-#include <encoder.h>
-#include <gyro.h>
-#include <drive.h>
+#include "API.h"
+#include "encoder.h"
+#include "gyro.h"
+#include "drive.h"
+#include "AutoUtils.h"
 
 // Allow usage of this file in C++ programs
 #ifdef __cplusplus
