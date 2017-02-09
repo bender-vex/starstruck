@@ -1,6 +1,8 @@
-#include <math.h>
-#include <api.h>
-#include <string.h>
+#ifndef _AUTOUTILS_H_
+#define _AUTOUTILS_H_
+#include "math.h"
+#include "main.h"
+#include "string.h"
 
 typedef struct
 {
@@ -26,4 +28,4 @@ float calculatePID(PIDHandle* handle, float position);
 
 void turnBase(short power);
 void moveBase(short x, short y, short r);
-
+#endif
