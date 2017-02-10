@@ -29,8 +29,12 @@
  *
  * This task should never exit; it should end with some kind of infinite loop, even if empty.
  */
-void operatorControl() {
-	while (1) {
+void operatorControl()
+{
+	//initHeadingThread();
+	while (1) 
+	{
+		moveBase(joystickGetAnalog(1,4),joystickGetAnalog(1,3),joystickGetAnalog(1,1));
 		delay(20);
 	}
 }
