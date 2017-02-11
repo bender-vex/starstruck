@@ -1,4 +1,6 @@
 #include "AutoUtils.h"
+#include "encoder.h"
+
 
 PIDHandle* initPID(float kp, float ki, float kd, float target, float error_cap)
 {
@@ -27,8 +29,22 @@ void setPIDTarget(PIDHandle* handle, float target)
 }
 
 
+void initAutoGlobals()
+{
+	gyro_pid = NULL;
+	x_pid = NULL;
+	y_pid = NULL;
+	arm_pid = NULL;
+	runHeadingThread = 0;
+	runArmThread = 0;
+	drive_mode = NONE;
+	e1 = encoderInit(1,2,1);
+	e2 = encoderInit(3,4,1);//Flip to 1 for y
+}
+
 float calculatePID(PIDHandle* handle, float position)
 {
+	if(handle == NULL) return 0.0;
 	float result = 0.0;
 	float pid_error = position - handle->target;
 	float derivative = 0.0;
@@ -47,9 +63,9 @@ float calculatePID(PIDHandle* handle, float position)
 	// calculate the derivative
 	derivative = pid_error - handle->last_error;
 	handle->last_error  = pid_error;
-
-	printf("%5.3f %5.3f %5.3f\n",pid_error, (handle->kp * pid_error), (handle->ki * handle->integral));
-
+	
+	//printf("%5.3f %5.3f %5.3f\n",pid_error, (handle->kp * pid_error), (handle->ki * handle->integral));
+	
 	result = (handle->kp * pid_error) + (handle->ki * handle->integral) + (handle->kd * derivative);
 
 	return result;
@@ -71,19 +87,86 @@ void moveBase(short x, short y, short r)
 	motorSet(MOTOR_FRONT_LEFT, -(y + r + x)); // Front Left
 }
 
+void setHeading(int angle)
+{
+	if(gyro_pid != NULL)
+	{
+		setPIDTarget(gyro_pid, angle);
+	}
+}
+
 void driveThread(void* param)
 {
-	PIDHandle* test_pid = NULL;
-	test_pid = initPID(2.5,0.12,0.5,0,10);
-	setPIDTarget(test_pid,0.0);
-	//freePID(test_pid);
+	
+	gyro_pid = initPID(2.5,0.12,.5,0,10);
+	setPIDTarget(gyro_pid,0.0);
 	Gyro gyro;
-	gyro = gyroInit(1, 0);
+	gyro = gyroInit( 1, 0 );
+	
+	//drive_mode = ROTATION_ONLY;
+	
+	//TODO Configure x and y
+	//TODO add sweet zone algorithm for x and y
+	//TODO get encoder code working
+	
+	y_pid = initPID(1.8,0.12,0.2,0,0);
+	int rec_pid_bl = 0;
+	int rec_pid_br = 0;
+	
 	while(runHeadingThread)
 	{
-		delay(FIXED_DELTA_TIME);
-		turnBase(calculatePID(test_pid,gyroGet(gyro)));
+		delay(20);
+		//printf("lol: %d\n",drive_mode);
+		printf("%6d %6d\n",encoderGet(e1), encoderGet(e2));
+		switch(drive_mode)
+		{
+			case NONE: break;
+			case ROTATION_ONLY:
+			{
+				moveBase(0,0,calculatePID(gyro_pid,gyroGet(gyro)));
+			}break;
+			case X_ROTATION:
+			{
+				float c_x = clampF(calculatePID(gyro_pid,gyroGet(gyro)), -60,60);
+				int v = (rec_pid_bl + rec_pid_bl);
+				float m_x = calculatePID(x_pid, (encoderGet(e1) + encoderGet(e2))/2);
+				m_x = clampF(m_x,-60,60);
+				//printf("r= %f\n",m_x);
+				moveBase(m_x,0,c_x);
+			}break;
+			case Y_ROTATION:
+			{
+				moveBase(0,0,calculatePID(gyro_pid,gyroGet(gyro)));
+			}break;
+			case X_ONLY:
+			{
+				
+			}break;
+			case Y_ONLY:
+			{
+				
+			}break;
+		}
+		
+		
+		//moveBase(0,-calculatePID(upid,uvalue),calculatePID(gyro_pid,gyroGet(gyro)));
 	}
+	freePID(gyro_pid);
+	gyro_pid = NULL;
+	freePID(x_pid);
+	x_pid = NULL;
+	freePID(y_pid);
+	y_pid = NULL;
+}
+
+void armThread(void* param)
+{
+	arm_pid = initPID(2.5,0.12,.5,0,10);//TODO configure this
+	while(runArmThread)
+	{
+		delay(20);
+	}
+	freePID(arm_pid);
 }
 
 void stopHeadingThread()
@@ -96,3 +179,56 @@ void initHeadingThread()
 	runHeadingThread = 1;
 	taskCreate(driveThread, TASK_DEFAULT_STACK_SIZE, NULL, TASK_PRIORITY_DEFAULT);
 }
+
+void initArmThread()
+{
+	runArmThread = 1;
+	taskCreate(armThread,  TASK_DEFAULT_STACK_SIZE, NULL, TASK_PRIORITY_DEFAULT);
+}
+
+void setAutoDriveMode(AutoDriveMode adm)
+{
+	drive_mode = adm;
+}
+
+float clampF(float value, float min, float max)
+{
+	if(value < min)
+	{
+		return min;
+	}
+	else if(value > max)
+	{
+		return max;
+	}
+	return value;
+}
+
+int clampI(int value, int min, int max)
+{
+	if(value < min)
+	{
+		return min;
+	}
+	else if(value > max)
+	{
+		return max;
+	}
+	return value;
+}
+
+void setXTarget(int target)
+{
+	//x_pid = initPID(0.2,0.12,0.2,0,0);
+	if(x_pid != NULL)
+	{
+		//setAutoDriveMode(ROTATION_ONLY);
+		//int current = x_pid->target;
+		//setPIDTarget(x_pid, 400.0);
+		//x_pid->target += target;
+	}
+}
+
+
+
+

@@ -1,8 +1,8 @@
 #ifndef _ENCODER_H_
 #define _ENCODER_H_
 
-#define ENCODER_FR 0
-#define ENCODER_FL 1
+#define ENCODER_BR 0
+#define ENCODER_BL 1
 #define IME_COUNT 2
 
 #include "API.h"

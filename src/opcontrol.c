@@ -31,10 +31,43 @@
  */
 void operatorControl()
 {
-	//initHeadingThread();
+	
+	initHeadingThread();
+	delay(20);
+	setAutoDriveMode(X_ROTATION);
+	delay(200);
+	x_pid = initPID(0.5,0.0,0.0,0,0);
+	setPIDTarget(x_pid, 400.0);
+	delay(1500);
+	setPIDTarget(x_pid, 0.0);
+	/*
+	delay(2000);
+	setHeading(90);
+	delay(2000);
+	setHeading(180);
+	delay(2000);
+	setHeading(0);
+	delay(2000);
+	setAutoDriveMode(X_ROTATION);
+	delay(2000);
+	setAutoDriveMode(ROTATION_ONLY);
+	delay(100);
+	setHeading(180);
+	delay(1500);
+	setAutoDriveMode(X_ROTATION);
+	delay(2000);
+	setAutoDriveMode(NONE);
+	*/
+	
+	
+	
 	while (1) 
 	{
-		moveBase(joystickGetAnalog(1,4),joystickGetAnalog(1,3),joystickGetAnalog(1,1));
+		//setAutoDriveMode(X_ROTATION);
+		//printf("%6d\n",ultrasonicGet(sonic));
+		//moveBase(joystickGetAnalog(1,4),joystickGetAnalog(1,3),joystickGetAnalog(1,1));
+		//moveBase(0,calculatePID(upid,ultrasonicGet(sonic)),0);
+		//moveBase(0,0,60);
 		delay(20);
 	}
 }
