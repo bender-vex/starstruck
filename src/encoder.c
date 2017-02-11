@@ -1,4 +1,4 @@
-#include <main.h>
+#include "encoder.h"
 
 /**
  Get total distance traveled in meters since last reset

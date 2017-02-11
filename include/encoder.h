@@ -1,7 +1,11 @@
 #ifndef _ENCODER_H_
 #define _ENCODER_H_
 
-#include <main.h>
+#define ENCODER_FR 0
+#define ENCODER_FL 1
+#define IME_COUNT 2
+
+#include "API.h"
 
 #ifndef PI
 #define PI 3.14159265358979323846
