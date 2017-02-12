@@ -38,11 +38,11 @@ void initializeIO() {
  * can be implemented in this task if desired.
  */
 void initialize() {
-	imeShutdown();
-	delay(300);
-	unsigned int imeCount = imeInitializeAll();
-	if (imeCount != IME_COUNT) {
-		print("IME failed to initialize!\n");
-	}
+	//imeShutdown();
+	//delay(300);
+	//unsigned int imeCount = imeInitializeAll();
+	//if (imeCount != IME_COUNT) {
+	//	print("IME failed to initialize!\n");
+	//}
 	initAutoGlobals();
 }

@@ -6,8 +6,13 @@
 #include <string.h>
 #include <drive.h>
 
-#define ARM_MOTOR_L 3
-#define ARM_MOTOR_R 4
+#define ARM_MOTOR_L_r_1 3
+#define ARM_MOTOR_L_2 4
+#define ARM_MOTOR_L_3 5
+#define ARM_MOTOR_R_2 7
+#define ARM_MOTOR_R_3 8
+
+
 typedef enum {NONE = 0, ROTATION_ONLY = 1, X_ROTATION = 2, Y_ROTATION, X_ONLY, Y_ONLY} AutoDriveMode;
 
 typedef struct
@@ -52,6 +57,6 @@ PIDHandle* x_pid;
 PIDHandle* y_pid;
 PIDHandle* arm_pid;
 
-Encoder e1;
-Encoder e2;
+Encoder e_right;
+Encoder e_left;
 #endif

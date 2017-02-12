@@ -38,8 +38,8 @@ void initAutoGlobals()
 	runHeadingThread = 0;
 	runArmThread = 0;
 	drive_mode = NONE;
-	e1 = encoderInit(1,2,1);
-	e2 = encoderInit(3,4,1);//Flip to 1 for y
+	e_left = encoderInit(1,2,1);
+	e_right = encoderInit(3,4,1);//Flip to 1 for y
 }
 
 float calculatePID(PIDHandle* handle, float position)
@@ -63,9 +63,9 @@ float calculatePID(PIDHandle* handle, float position)
 	// calculate the derivative
 	derivative = pid_error - handle->last_error;
 	handle->last_error  = pid_error;
-	
+
 	//printf("%5.3f %5.3f %5.3f\n",pid_error, (handle->kp * pid_error), (handle->ki * handle->integral));
-	
+
 	result = (handle->kp * pid_error) + (handle->ki * handle->integral) + (handle->kd * derivative);
 
 	return result;
@@ -97,27 +97,28 @@ void setHeading(int angle)
 
 void driveThread(void* param)
 {
-	
+
 	gyro_pid = initPID(2.5,0.12,.5,0,10);
 	setPIDTarget(gyro_pid,0.0);
 	Gyro gyro;
 	gyro = gyroInit( 1, 0 );
-	
+
 	//drive_mode = ROTATION_ONLY;
-	
+
 	//TODO Configure x and y
 	//TODO add sweet zone algorithm for x and y
 	//TODO get encoder code working
-	
+	// = initPID(0.5,0.0,0.0,0,0);
 	y_pid = initPID(1.8,0.12,0.2,0,0);
 	int rec_pid_bl = 0;
 	int rec_pid_br = 0;
-	
+	float m_x = 0;
+	float c_x = 0;
 	while(runHeadingThread)
 	{
 		delay(20);
 		//printf("lol: %d\n",drive_mode);
-		printf("%6d %6d\n",encoderGet(e1), encoderGet(e2));
+		printf("%6d %6d\n",encoderGet(e_left), encoderGet(e_right));
 		switch(drive_mode)
 		{
 			case NONE: break;
@@ -127,12 +128,12 @@ void driveThread(void* param)
 			}break;
 			case X_ROTATION:
 			{
-				float c_x = clampF(calculatePID(gyro_pid,gyroGet(gyro)), -60,60);
-				int v = (rec_pid_bl + rec_pid_bl);
-				float m_x = calculatePID(x_pid, (encoderGet(e1) + encoderGet(e2))/2);
+				c_x = clampF(calculatePID(gyro_pid,gyroGet(gyro)), -60,60);
+				m_x = calculatePID(x_pid, (encoderGet(e_left) + encoderGet(e_right))/2);
 				m_x = clampF(m_x,-60,60);
+				int val = (int)m_x * -1;
 				//printf("r= %f\n",m_x);
-				moveBase(m_x,0,c_x);
+				moveBase(val,0,c_x);
 			}break;
 			case Y_ROTATION:
 			{
@@ -140,15 +141,15 @@ void driveThread(void* param)
 			}break;
 			case X_ONLY:
 			{
-				
+
 			}break;
 			case Y_ONLY:
 			{
-				
+
 			}break;
 		}
-		
-		
+
+
 		//moveBase(0,-calculatePID(upid,uvalue),calculatePID(gyro_pid,gyroGet(gyro)));
 	}
 	freePID(gyro_pid);
@@ -228,7 +229,3 @@ void setXTarget(int target)
 		//x_pid->target += target;
 	}
 }
-
-
-
-
