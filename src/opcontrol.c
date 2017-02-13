@@ -32,16 +32,15 @@
 void operatorControl()
 {
 
-	
+	/*
 	initHeadingThread();
 	delay(20);
 	setAutoDriveMode(X_ROTATION);
 	delay(200);
-	x_pid = initPID(0.5,0.0,0.0,0,0);
 	setPIDTarget(x_pid, 400.0);
 	delay(1500);
 	setPIDTarget(x_pid, 0.0);
-	/*
+
 	initHeadingThread();
 
 	setAutoDriveMode(ROTATION_ONLY);
@@ -71,9 +70,34 @@ void operatorControl()
 		printf("asdf\n");
 		//setAutoDriveMode(X_ROTATION);
 		//printf("%6d\n",ultrasonicGet(sonic));
-		//moveBase(joystickGetAnalog(1,4),joystickGetAnalog(1,3),joystickGetAnalog(1,1));
+		moveBase(joystickGetAnalog(1,4),joystickGetAnalog(1,3),joystickGetAnalog(1,1));
 		//moveBase(0,calculatePID(upid,ultrasonicGet(sonic)),0);
 		//moveBase(0,0,60);
+		if(joystickGetDigital(1, 5, JOY_UP))
+		{
+			armPower(127);
+		}
+		else if(joystickGetDigital(1, 5, JOY_DOWN))
+		{
+			armPower(-127);
+		}
+		else
+		{
+			armPower(0);
+		}
+
+		if(joystickGetDigital(1, 6, JOY_UP))
+		{
+			clawPower(127);
+		}
+		else if(joystickGetDigital(1, 6, JOY_DOWN))
+		{
+			clawPower(-127);
+		}
+		else
+		{
+			clawPower(0);
+		}
 		delay(20);
 	}
 }

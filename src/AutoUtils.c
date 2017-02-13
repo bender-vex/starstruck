@@ -40,6 +40,10 @@ void initAutoGlobals()
 	drive_mode = NONE;
 	e_left = encoderInit(1,2,1);
 	e_right = encoderInit(3,4,1);//Flip to 1 for y
+	e_arm = encoderInit(5,6,1);
+	arm_pid = initPID(2.5,0.12,.5,0,10);//TODO configure this
+	y_pid = initPID(0.5,0.5,0.0,0.0,0.0);
+	x_pid = initPID(0.5,0.0,0.0,0.0,0.0);
 }
 
 float calculatePID(PIDHandle* handle, float position)
@@ -87,6 +91,11 @@ void moveBase(short x, short y, short r)
 	motorSet(MOTOR_FRONT_LEFT, -(y + r + x)); // Front Left
 }
 
+void clawPower(int power)
+{
+	motorSet(CLAW_MOTOR, power);
+}
+
 void setHeading(int angle)
 {
 	if(gyro_pid != NULL)
@@ -109,9 +118,6 @@ void driveThread(void* param)
 	//TODO add sweet zone algorithm for x and y
 	//TODO get encoder code working
 	// = initPID(0.5,0.0,0.0,0,0);
-	y_pid = initPID(1.8,0.12,0.2,0,0);
-	int rec_pid_bl = 0;
-	int rec_pid_br = 0;
 	float m_x = 0;
 	float c_x = 0;
 	while(runHeadingThread)
@@ -137,7 +143,12 @@ void driveThread(void* param)
 			}break;
 			case Y_ROTATION:
 			{
-				moveBase(0,0,calculatePID(gyro_pid,gyroGet(gyro)));
+				c_x = clampF(calculatePID(gyro_pid,gyroGet(gyro)), -60,60);
+				m_x = calculatePID(y_pid, (encoderGet(e_left) + encoderGet(e_right))/2);
+				m_x = clampF(m_x,-60,60);
+				int val = (int)m_x * -1;
+				//printf("r= %f\n",m_x);
+				moveBase(val,0,c_x);
 			}break;
 			case X_ONLY:
 			{
@@ -160,11 +171,30 @@ void driveThread(void* param)
 	y_pid = NULL;
 }
 
+void armPower(int power)
+{
+	motorSet(ARM_MOTOR_L_B, -power);
+	motorSet(ARM_MOTOR_L_T, power);
+	motorSet(ARM_MOTOR_R_B, power);
+	motorSet(ARM_MOTOR_R_T, -power);
+}
+
+void setArmTarget(int target)
+{
+	if(arm_pid != NULL)
+	{
+		arm_pid->target = target;
+	}
+}
+
 void armThread(void* param)
 {
-	arm_pid = initPID(2.5,0.12,.5,0,10);//TODO configure this
+
+	int power = 0;
 	while(runArmThread)
 	{
+		power = calculatePID(arm_pid, encoderGet(e_arm));
+		armPower(power);
 		delay(20);
 	}
 	freePID(arm_pid);
