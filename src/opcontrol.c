@@ -63,8 +63,28 @@ void operatorControl()
 	setAutoDriveMode(NONE);
 	*/
 
+	initArmThread();
+	/*
+	delay(1000);
+	setArmTarget(-145);
+	delay(3000);
+	clawPower(-127);
+	delay(500);
+	clawPower(-100);
+	delay(250);
+	setArmTarget(250);
+	delay(1500);
+	setArmTarget(00);
+	delay(375);
+	clawPower(127);
+	delay(350);
+	clawPower(0);
+	delay(10000000);
+	*/
 
 
+	bool pick_up = false;
+	bool toss = false;
 	while (1)
 	{
 		printf("asdf\n");
@@ -73,6 +93,20 @@ void operatorControl()
 		moveBase(joystickGetAnalog(1,4),joystickGetAnalog(1,3),joystickGetAnalog(1,1));
 		//moveBase(0,calculatePID(upid,ultrasonicGet(sonic)),0);
 		//moveBase(0,0,60);
+
+
+		if(joystickGetDigital(1,8,JOY_DOWN) && pick_up == false)
+		{
+			pickUpMacro();
+		}
+		pick_up = joystickGetDigital(1,8,JOY_DOWN);
+
+		if(joystickGetDigital(1,8,JOY_RIGHT) && pick_up == false)
+		{
+			tossMacro();
+		}
+		toss = joystickGetDigital(1,8,JOY_RIGHT);
+		/*
 		if(joystickGetDigital(1, 5, JOY_UP))
 		{
 			armPower(127);
@@ -98,6 +132,7 @@ void operatorControl()
 		{
 			clawPower(0);
 		}
+		*/
 		delay(20);
 	}
 }

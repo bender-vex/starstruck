@@ -35,6 +35,7 @@ void initHeadingThread();
 void initAutoGlobals();
 void setAutoDriveMode(AutoDriveMode adm);
 void setHeading(int angle);
+void initArmThread();
 void setXTarget(int target);
 
 
@@ -56,6 +57,10 @@ void setArmTarget(int target);
 float clampF(float value, float min, float max);
 int clampI(int value, int min, int max);
 
+
+void pickUpMacro();
+
+void tossMacro();
 
 //Globals
 AutoDriveMode drive_mode;

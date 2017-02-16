@@ -41,7 +41,7 @@ void initAutoGlobals()
 	e_left = encoderInit(1,2,1);
 	e_right = encoderInit(3,4,1);//Flip to 1 for y
 	e_arm = encoderInit(5,6,1);
-	arm_pid = initPID(2.5,0.12,.5,0,10);//TODO configure this
+	arm_pid = initPID(2.5,0.12,0.0,0,10);//TODO configure this
 	y_pid = initPID(0.5,0.5,0.0,0.0,0.0);
 	x_pid = initPID(0.5,0.0,0.0,0.0,0.0);
 }
@@ -193,7 +193,7 @@ void armThread(void* param)
 	int power = 0;
 	while(runArmThread)
 	{
-		power = calculatePID(arm_pid, encoderGet(e_arm));
+		power = -calculatePID(arm_pid, encoderGet(e_arm));
 		armPower(power);
 		delay(20);
 	}
@@ -221,6 +221,41 @@ void setAutoDriveMode(AutoDriveMode adm)
 {
 	drive_mode = adm;
 }
+
+void pickUpMacroThread()
+{
+	delay(250);
+	setArmTarget(-145);
+	delay(1500);
+	clawPower(-127);
+	delay(500);
+	clawPower(-50);
+	setArmTarget(0);
+}
+
+void tossMacroThread()
+{
+	setArmTarget(250);
+	delay(1500);
+	setArmTarget(00);
+	delay(375);
+	clawPower(127);
+	delay(200);
+	clawPower(0);
+}
+
+void tossMacro()
+{
+	//TODO Make less stupid and add safety (Cant run more than 1 and cancel mode)
+	taskCreate(tossMacroThread,  TASK_DEFAULT_STACK_SIZE, NULL, TASK_PRIORITY_DEFAULT);
+}
+
+void pickUpMacro()
+{
+	//TODO Make less stupid and add safety (Cant run more than 1 and cancel mode)
+	taskCreate(pickUpMacroThread,  TASK_DEFAULT_STACK_SIZE, NULL, TASK_PRIORITY_DEFAULT);
+}
+
 
 float clampF(float value, float min, float max)
 {
