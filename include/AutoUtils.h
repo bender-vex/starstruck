@@ -45,9 +45,6 @@ void setPIDTarget(PIDHandle* handle, float target);
 void freePID(PIDHandle* handle);
 float calculatePID(PIDHandle* handle, float position);
 
-
-void turnBase(short power);
-void moveBase(short x, short y, short r);
 void armPower(int power);
 void clawPower(int power);
 
@@ -56,7 +53,6 @@ void setArmTarget(int target);
 
 float clampF(float value, float min, float max);
 int clampI(int value, int min, int max);
-
 
 void pickUpMacro();
 
