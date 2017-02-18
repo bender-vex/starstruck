@@ -32,15 +32,28 @@
 void operatorControl()
 {
 
-	/*
+	
+	initArmThread();
 	initHeadingThread();
-	delay(20);
-	setAutoDriveMode(X_ROTATION);
-	delay(200);
-	setPIDTarget(x_pid, 400.0);
-	delay(1500);
-	setPIDTarget(x_pid, 0.0);
-
+	delay(5000);
+	moveY(400);
+	delay(3000);
+	moveY(-400);
+	delay(3000);
+	moveX(400);
+	delay(3000);
+	moveX(-400);
+	delay(2000);
+	moveY(400);
+	delay(2000);
+	moveX(400);
+	delay(2000);
+	moveY(-400);
+	delay(2000);
+	moveX(-400);
+	//setPIDTarget(y_pid, 0.0);
+	delay(100000);
+	/*
 	initHeadingThread();
 
 	setAutoDriveMode(ROTATION_ONLY);
@@ -63,7 +76,7 @@ void operatorControl()
 	setAutoDriveMode(NONE);
 	*/
 
-	initArmThread();
+	
 	/*
 	delay(1000);
 	setArmTarget(-145);
@@ -85,6 +98,7 @@ void operatorControl()
 
 	bool pick_up = false;
 	bool toss = false;
+	bool claw_overide = false;
 	while (1)
 	{
 		printf("asdf\n");
@@ -101,11 +115,31 @@ void operatorControl()
 		}
 		pick_up = joystickGetDigital(1,8,JOY_DOWN);
 
-		if(joystickGetDigital(1,8,JOY_RIGHT) && pick_up == false)
+		if(joystickGetDigital(1,8,JOY_RIGHT) && toss == false)
 		{
 			tossMacro();
 		}
 		toss = joystickGetDigital(1,8,JOY_RIGHT);
+		
+		
+		//claw_overide
+		if(joystickGetDigital(1, 6, JOY_UP))
+		{
+			claw_overide = true;
+			clawPower(75);
+		}
+		else if(joystickGetDigital(1, 6, JOY_DOWN))
+		{
+			claw_overide = true;
+			clawPower(-75);
+		}
+		else if(claw_overide)
+		{
+			claw_overide = false;
+			clawPower(0);
+		}
+		
+		
 		/*
 		if(joystickGetDigital(1, 5, JOY_UP))
 		{

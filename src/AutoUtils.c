@@ -41,9 +41,11 @@ void initAutoGlobals()
 	e_left = encoderInit(1,2,1);
 	e_right = encoderInit(3,4,1);//Flip to 1 for y
 	e_arm = encoderInit(5,6,1);
-	arm_pid = initPID(2.5,0.12,0.0,0,10);//TODO configure this
-	y_pid = initPID(0.5,0.5,0.0,0.0,0.0);
-	x_pid = initPID(0.5,0.0,0.0,0.0,0.0);
+	//e_back = encoderInit(7, 8, 1);
+	arm_pid = initPID(2.0,0.12,0.0,0,10);//TODO configure this
+	y_pid = initPID(0.5,0.0,0.0,0.0,10.0);
+	x_pid = initPID(0.5,0.0,0.0,0.0,10.0);
+	arm_macro_mutex = false;
 }
 
 float calculatePID(PIDHandle* handle, float position)
@@ -118,13 +120,12 @@ void driveThread(void* param)
 	//TODO add sweet zone algorithm for x and y
 	//TODO get encoder code working
 	// = initPID(0.5,0.0,0.0,0,0);
-	float m_x = 0;
-	float c_x = 0;
+	float movement_x = 0, movement_y = 0, rotation = 0;
 	while(runHeadingThread)
 	{
 		delay(20);
 		//printf("lol: %d\n",drive_mode);
-		printf("%6d %6d\n",encoderGet(e_left), encoderGet(e_right));
+		//printf("Left: %6d Right: %6d Back: %6d\n",encoderGet(e_left), encoderGet(e_right), encoderGet(e_back));
 		switch(drive_mode)
 		{
 			case NONE: break;
@@ -134,21 +135,20 @@ void driveThread(void* param)
 			}break;
 			case X_ROTATION:
 			{
-				c_x = clampF(calculatePID(gyro_pid,gyroGet(gyro)), -60,60);
-				m_x = calculatePID(x_pid, (encoderGet(e_left) + encoderGet(e_right))/2);
-				m_x = clampF(m_x,-60,60);
-				int val = (int)m_x * -1;
-				//printf("r= %f\n",m_x);
-				moveBase(val,0,c_x);
+				rotation = clampF(calculatePID(gyro_pid,gyroGet(gyro)), -60,60);// value is now between -60 and 60
+				movement_x = calculatePID(x_pid, (encoderGet(e_left) + encoderGet(e_right))/2);// left and right encoders are averaged
+				movement_x = clampF(movement_x,-60,60);
+				int val = (int)movement_x * -1;
+				moveBase(val,0,rotation);
 			}break;
 			case Y_ROTATION:
 			{
-				c_x = clampF(calculatePID(gyro_pid,gyroGet(gyro)), -60,60);
-				m_x = calculatePID(y_pid, (encoderGet(e_left) + encoderGet(e_right))/2);
-				m_x = clampF(m_x,-60,60);
-				int val = (int)m_x * -1;
-				//printf("r= %f\n",m_x);
-				moveBase(val,0,c_x);
+				rotation = clampF(calculatePID(gyro_pid,gyroGet(gyro)), -60,60);
+				movement_y = calculatePID(y_pid, ((encoderGet(e_left) * -1) + (encoderGet(e_right))/2));// average left and back encoders
+				movement_y = clampF(movement_y,-60,60);	
+				//printf("Value: %d\n",encoderGet(e_left));
+				int val = (int)movement_y * -1;
+				moveBase(0,val,rotation);
 			}break;
 			case X_ONLY:
 			{
@@ -169,6 +169,12 @@ void driveThread(void* param)
 	x_pid = NULL;
 	freePID(y_pid);
 	y_pid = NULL;
+}
+
+void resetEncoders()
+{
+	encoderReset(e_right);
+	encoderReset(e_left);
 }
 
 void armPower(int power)
@@ -224,6 +230,7 @@ void setAutoDriveMode(AutoDriveMode adm)
 
 void pickUpMacroThread()
 {
+	arm_macro_mutex = true;
 	delay(250);
 	setArmTarget(-145);
 	delay(1500);
@@ -231,10 +238,12 @@ void pickUpMacroThread()
 	delay(500);
 	clawPower(-50);
 	setArmTarget(0);
+	arm_macro_mutex = false;
 }
 
 void tossMacroThread()
 {
+	arm_macro_mutex = true;
 	setArmTarget(250);
 	delay(1500);
 	setArmTarget(00);
@@ -242,18 +251,25 @@ void tossMacroThread()
 	clawPower(127);
 	delay(200);
 	clawPower(0);
+	arm_macro_mutex = false;
 }
 
 void tossMacro()
 {
 	//TODO Make less stupid and add safety (Cant run more than 1 and cancel mode)
-	taskCreate(tossMacroThread,  TASK_DEFAULT_STACK_SIZE, NULL, TASK_PRIORITY_DEFAULT);
+	if(arm_macro_mutex == false)
+	{
+		taskCreate(tossMacroThread,  TASK_DEFAULT_STACK_SIZE, NULL, TASK_PRIORITY_DEFAULT);
+	}
 }
 
 void pickUpMacro()
 {
 	//TODO Make less stupid and add safety (Cant run more than 1 and cancel mode)
-	taskCreate(pickUpMacroThread,  TASK_DEFAULT_STACK_SIZE, NULL, TASK_PRIORITY_DEFAULT);
+	if(arm_macro_mutex == false)
+	{
+		taskCreate(pickUpMacroThread,  TASK_DEFAULT_STACK_SIZE, NULL, TASK_PRIORITY_DEFAULT);
+	}
 }
 
 
@@ -294,3 +310,18 @@ void setXTarget(int target)
 		//x_pid->target += target;
 	}
 }
+
+void moveY(int distance)
+{
+	setAutoDriveMode(Y_ROTATION);
+	resetEncoders();
+	setPIDTarget(y_pid, distance);
+}
+
+void moveX(int distance)
+{
+	setAutoDriveMode(X_ROTATION);
+	resetEncoders();
+	setPIDTarget(x_pid, distance);
+}
+

@@ -1,4 +1,4 @@
-#ifndef AUTOUTILS_H_   /* Include guard */
+#ifndef AUTOUTILS_H_
 #define AUTOUTILS_H_
 
 #include <math.h>
@@ -37,7 +37,11 @@ void setAutoDriveMode(AutoDriveMode adm);
 void setHeading(int angle);
 void initArmThread();
 void setXTarget(int target);
+void resetEncoders();
 
+//Easy move stuff
+void moveX(int distance);
+void moveY(int distance);
 
 
 PIDHandle* initPID(float kp, float ki, float kd, float target, float error_cap);
@@ -61,6 +65,8 @@ int clampI(int value, int min, int max);
 void pickUpMacro();
 
 void tossMacro();
+
+bool arm_macro_mutex;
 
 //Globals
 AutoDriveMode drive_mode;
