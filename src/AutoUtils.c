@@ -42,7 +42,7 @@ void initAutoGlobals()
 	e_right = encoderInit(3,4,1);//Flip to 1 for y
 	e_arm = encoderInit(5,6,1);
 	//e_back = encoderInit(7, 8, 1);
-	arm_pid = initPID(2.1,0.12,0.15,0,10);
+	arm_pid = initPID(2.1,0.12,0.0,0,5);
 	y_pid = initPID(0.5,0.0,0.0,0.0,10.0);
 	x_pid = initPID(0.5,0.0,0.0,0.0,10.0);
 	arm_macro_mutex = false;
@@ -230,20 +230,21 @@ void pickUpMacroThread()
 {
 	arm_macro_mutex = true;
 	delay(250);
-	setArmTarget(-145);
-	delay(1500);
+	setArmTarget(CLAW_GROUND);
+	while(joystickGetDigital(1,8,JOY_DOWN) == false) delay(40);
 	clawPower(-127);
 	delay(500);
 	clawPower(-50);
-	setArmTarget(0);
+	setArmTarget(CLAW_REST);
 	arm_macro_mutex = false;
 }
 
 void tossMacroThread()
 {
 	arm_macro_mutex = true;
-	setArmTarget(250);
-	delay(1500);
+	setArmTarget(CLAW_BACK);
+	delay(500);
+	while(joystickGetDigital(1,8,JOY_RIGHT) == false) delay(40);
 	setArmTarget(00);
 	delay(375);
 	clawPower(127);

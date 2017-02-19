@@ -10,6 +10,9 @@
 #define ARM_MOTOR_TOP 4
 #define CLAW_MOTOR 8
 
+#define CLAW_REST 120
+#define CLAW_GROUND -45
+#define CLAW_BACK 350
 
 
 typedef enum {NONE = 0, ROTATION_ONLY = 1, X_ROTATION = 2, Y_ROTATION, X_ONLY, Y_ONLY} AutoDriveMode;
