@@ -6,10 +6,8 @@
 #include <string.h>
 #include <drive.h>
 
-#define ARM_MOTOR_L_B 3
-#define ARM_MOTOR_L_T 4
-#define ARM_MOTOR_R_B 6
-#define ARM_MOTOR_R_T 5
+#define ARM_MOTOR_BOTTOM 3
+#define ARM_MOTOR_TOP 4
 #define CLAW_MOTOR 8
 
 

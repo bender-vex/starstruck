@@ -32,10 +32,10 @@
 void operatorControl()
 {
 
-	
+
 	initArmThread();
 	initHeadingThread();
-	delay(5000);
+	/*delay(5000);
 	moveY(400);
 	delay(3000);
 	moveY(-400);
@@ -52,7 +52,7 @@ void operatorControl()
 	delay(2000);
 	moveX(-400);
 	//setPIDTarget(y_pid, 0.0);
-	delay(100000);
+	delay(100000);*/
 	/*
 	initHeadingThread();
 
@@ -76,7 +76,7 @@ void operatorControl()
 	setAutoDriveMode(NONE);
 	*/
 
-	
+
 	/*
 	delay(1000);
 	setArmTarget(-145);
@@ -120,8 +120,8 @@ void operatorControl()
 			tossMacro();
 		}
 		toss = joystickGetDigital(1,8,JOY_RIGHT);
-		
-		
+
+
 		//claw_overide
 		if(joystickGetDigital(1, 6, JOY_UP))
 		{
@@ -138,8 +138,14 @@ void operatorControl()
 			claw_overide = false;
 			clawPower(0);
 		}
-		
-		
+
+		// move lift with up and down buttons in button group 5
+		if (joystickGetDigital(1, 5, JOY_UP)) {
+			liftPower(64);
+		} else {
+			liftPower(-64 * joystickGetDigital(1, 5, JOY_DOWN));
+		}
+
 		/*
 		if(joystickGetDigital(1, 5, JOY_UP))
 		{

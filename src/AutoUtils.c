@@ -42,7 +42,7 @@ void initAutoGlobals()
 	e_right = encoderInit(3,4,1);//Flip to 1 for y
 	e_arm = encoderInit(5,6,1);
 	//e_back = encoderInit(7, 8, 1);
-	arm_pid = initPID(2.0,0.12,0.0,0,10);//TODO configure this
+	arm_pid = initPID(2.1,0.12,0.15,0,10);
 	y_pid = initPID(0.5,0.0,0.0,0.0,10.0);
 	x_pid = initPID(0.5,0.0,0.0,0.0,10.0);
 	arm_macro_mutex = false;
@@ -145,7 +145,7 @@ void driveThread(void* param)
 			{
 				rotation = clampF(calculatePID(gyro_pid,gyroGet(gyro)), -60,60);
 				movement_y = calculatePID(y_pid, ((encoderGet(e_left) * -1) + (encoderGet(e_right))/2));// average left and back encoders
-				movement_y = clampF(movement_y,-60,60);	
+				movement_y = clampF(movement_y,-60,60);
 				//printf("Value: %d\n",encoderGet(e_left));
 				int val = (int)movement_y * -1;
 				moveBase(0,val,rotation);
@@ -179,10 +179,8 @@ void resetEncoders()
 
 void armPower(int power)
 {
-	motorSet(ARM_MOTOR_L_B, -power);
-	motorSet(ARM_MOTOR_L_T, power);
-	motorSet(ARM_MOTOR_R_B, power);
-	motorSet(ARM_MOTOR_R_T, -power);
+	motorSet(ARM_MOTOR_TOP, -power);
+	motorSet(ARM_MOTOR_BOTTOM, power);
 }
 
 void setArmTarget(int target)
@@ -324,4 +322,3 @@ void moveX(int distance)
 	resetEncoders();
 	setPIDTarget(x_pid, distance);
 }
-
