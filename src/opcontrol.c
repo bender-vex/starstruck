@@ -33,8 +33,8 @@ void operatorControl()
 {
 
 
-	initArmThread();
-	initHeadingThread();
+	setAutoDriveMode(NONE);
+	//initHeadingThread();
 	/*delay(5000);
 	moveY(400);
 	delay(3000);
