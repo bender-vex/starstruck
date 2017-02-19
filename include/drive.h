@@ -4,10 +4,10 @@
 /**
  * Define constants for motor ports
  */
-#define MOTOR_FRONT_LEFT 1
-#define MOTOR_FRONT_RIGHT 2
-#define MOTOR_BACK_LEFT 9
-#define MOTOR_BACK_RIGHT 10
+#define MOTOR_FRONT_LEFT 10
+#define MOTOR_FRONT_RIGHT 9
+#define MOTOR_BACK_LEFT 2
+#define MOTOR_BACK_RIGHT 1
 
 /**
  * Use input from joystick to find what the motor outputs should be

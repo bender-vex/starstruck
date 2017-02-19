@@ -11,6 +11,7 @@
  */
 
 #include "main.h"
+#include "AutoUtils.h"
 
 /*
  * Runs pre-initialization code. This function will be started in kernel mode one time while the
@@ -37,9 +38,11 @@ void initializeIO() {
  * can be implemented in this task if desired.
  */
 void initialize() {
-	unsigned int imeCount = imeInitializeAll();
-	if (imeCount != IME_COUNT) {
-		print("IME failed to initialize!\n");
-	}
-
+	//imeShutdown();
+	//delay(300);
+	//unsigned int imeCount = imeInitializeAll();
+	//if (imeCount != IME_COUNT) {
+	//	print("IME failed to initialize!\n");
+	//}
+	initAutoGlobals();
 }
