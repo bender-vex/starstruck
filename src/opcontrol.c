@@ -99,6 +99,7 @@ void operatorControl()
 	bool pick_up = false;
 	bool toss = false;
 	bool claw_overide = false;
+	bool arm_override = false;
 	while (1)
 	{
 		printf("asdf\n");
@@ -121,6 +122,19 @@ void operatorControl()
 		}
 		toss = joystickGetDigital(1,8,JOY_RIGHT);
 
+		// manual control of arm target
+		if (!arm_override) {
+			if (joystickGetDigital(1, 7, JOY_UP)) {
+				arm_macro_mutex = true;
+				arm_pid->target += 30;
+			} else if (joystickGetDigital(1, 7, JOY_DOWN)) {
+				arm_macro_mutex = true;
+				arm_pid->target -= 30;
+			} else {
+				arm_macro_mutex = false;
+			}
+		}
+		arm_override = joystickGetDigital(1, 7, JOY_UP) | joystickGetDigital(1, 7, JOY_DOWN);
 
 		//claw_overide
 		if(joystickGetDigital(1, 6, JOY_UP))
