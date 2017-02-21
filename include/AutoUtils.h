@@ -12,7 +12,8 @@
 
 #define CLAW_REST 120
 #define CLAW_GROUND -45
-#define CLAW_BACK 350
+#define CLAW_BACK 350 
+#define CLAW_RELEASE_BASIC 100 //PLACE HOLDER
 
 
 typedef enum {NONE = 0, ROTATION_ONLY = 1, X_ROTATION = 2, Y_ROTATION, X_ONLY, Y_ONLY} AutoDriveMode;
@@ -59,8 +60,7 @@ void clawPower(int power);
 void setArmTarget(int target);
 
 
-float clampF(float value, float min, float max);
-int clampI(int value, int min, int max);
+
 
 
 void pickUpMacro();
@@ -68,6 +68,14 @@ void pickUpMacro();
 void tossMacro();
 
 bool arm_macro_mutex;
+
+
+//Utilities
+float clampF(float value, float min, float max);
+int clampI(int value, int min, int max);
+void waitEncoderGreater(int value, Encoder encoder);
+void waitEncoderLess(int value, Encoder encoder);
+
 
 //Globals
 AutoDriveMode drive_mode;

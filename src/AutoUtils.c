@@ -298,6 +298,17 @@ int clampI(int value, int min, int max)
 	return value;
 }
 
+void waitEncoderGreater(int value, Encoder encoder)
+{
+	while( encoderGet(encoder) < value) delay(50);
+}
+
+void waitEncoderLess(int value, Encoder encoder)
+{
+	while( encoderGet(encoder) > value) delay(50);
+}
+
+
 void setXTarget(int target)
 {
 	//x_pid = initPID(0.2,0.12,0.2,0,0);
