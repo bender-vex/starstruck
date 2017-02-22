@@ -121,7 +121,7 @@ void operatorControl()
 			tossMacro();
 		}
 		toss = joystickGetDigital(1,8,JOY_RIGHT);
-
+		/*
 		// manual control of arm target
 		if (!arm_override) {
 			if (joystickGetDigital(1, 7, JOY_UP)) {
@@ -135,7 +135,7 @@ void operatorControl()
 			}
 		}
 		arm_override = joystickGetDigital(1, 7, JOY_UP) | joystickGetDigital(1, 7, JOY_DOWN);
-
+		*/
 		//claw_overide
 		if(joystickGetDigital(1, 6, JOY_UP))
 		{
@@ -152,14 +152,15 @@ void operatorControl()
 			claw_overide = false;
 			clawPower(0);
 		}
-
+		
+		/*
 		// move lift with up and down buttons in button group 5
 		if (joystickGetDigital(1, 5, JOY_UP)) {
 			liftPower(64);
 		} else {
 			liftPower(-64 * joystickGetDigital(1, 5, JOY_DOWN));
 		}
-
+		*/
 		/*
 		if(joystickGetDigital(1, 5, JOY_UP))
 		{

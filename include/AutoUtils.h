@@ -12,7 +12,7 @@
 
 #define CLAW_REST 120
 #define CLAW_GROUND -45
-#define CLAW_BACK 350 
+#define CLAW_BACK 300
 #define CLAW_RELEASE_BASIC 100 //PLACE HOLDER
 
 

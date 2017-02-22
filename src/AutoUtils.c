@@ -229,7 +229,7 @@ void setAutoDriveMode(AutoDriveMode adm)
 void pickUpMacroThread()
 {
 	arm_macro_mutex = true;
-	delay(250);
+	delay(500);
 	setArmTarget(CLAW_GROUND);
 	while(joystickGetDigital(1,8,JOY_DOWN) == false) delay(40);
 	clawPower(-127);
@@ -245,8 +245,8 @@ void tossMacroThread()
 	setArmTarget(CLAW_BACK);
 	delay(500);
 	while(joystickGetDigital(1,8,JOY_RIGHT) == false) delay(40);
-	setArmTarget(00);
-	delay(375);
+	setArmTarget(100);
+	waitEncoderLess(180,e_arm);
 	clawPower(127);
 	delay(200);
 	clawPower(0);
