@@ -231,10 +231,11 @@ void pickUpMacroThread()
 	arm_macro_mutex = true;
 	delay(500);
 	setArmTarget(CLAW_GROUND);
-	while(joystickGetDigital(1,8,JOY_DOWN) == false) delay(40);
+	//while(joystickGetDigital(1,8,JOY_DOWN) == false) delay(40);
+	delay(1000);
 	clawPower(-127);
-	delay(500);
-	clawPower(-50);
+	delay(750);
+	clawPower(-55);
 	setArmTarget(CLAW_REST);
 	arm_macro_mutex = false;
 }
@@ -244,11 +245,12 @@ void tossMacroThread()
 	arm_macro_mutex = true;
 	setArmTarget(CLAW_BACK);
 	delay(500);
-	while(joystickGetDigital(1,8,JOY_RIGHT) == false) delay(40);
+	//while(joystickGetDigital(1,8,JOY_RIGHT) == false) delay(40);
+	delay(750);
 	setArmTarget(100);
-	waitEncoderLess(180,e_arm);
+	waitEncoderLess(CLAW_RELEASE_BASIC,e_arm);
 	clawPower(127);
-	delay(200);
+	delay(600);
 	clawPower(0);
 	arm_macro_mutex = false;
 }
