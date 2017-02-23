@@ -102,13 +102,7 @@ void operatorControl()
 	bool arm_override = false;
 	while (1)
 	{
-		printf("asdf\n");
-		//setAutoDriveMode(X_ROTATION);
-		//printf("%6d\n",ultrasonicGet(sonic));
 		moveBase(joystickGetAnalog(1,4),joystickGetAnalog(1,3),joystickGetAnalog(1,1));
-		//moveBase(0,calculatePID(upid,ultrasonicGet(sonic)),0);
-		//moveBase(0,0,60);
-
 
 		if(joystickGetDigital(1,8,JOY_DOWN) && pick_up == false)
 		{
@@ -121,7 +115,7 @@ void operatorControl()
 			tossMacro();
 		}
 		toss = joystickGetDigital(1,8,JOY_RIGHT);
-		/*
+		
 		// manual control of arm target
 		if (!arm_override) {
 			if (joystickGetDigital(1, 7, JOY_UP)) {
@@ -135,7 +129,7 @@ void operatorControl()
 			}
 		}
 		arm_override = joystickGetDigital(1, 7, JOY_UP) | joystickGetDigital(1, 7, JOY_DOWN);
-		*/
+		
 		//claw_overide
 		if(joystickGetDigital(1, 6, JOY_UP))
 		{
@@ -153,41 +147,14 @@ void operatorControl()
 			clawPower(0);
 		}
 		
-		/*
+		
 		// move lift with up and down buttons in button group 5
 		if (joystickGetDigital(1, 5, JOY_UP)) {
 			liftPower(64);
 		} else {
 			liftPower(-64 * joystickGetDigital(1, 5, JOY_DOWN));
 		}
-		*/
-		/*
-		if(joystickGetDigital(1, 5, JOY_UP))
-		{
-			armPower(127);
-		}
-		else if(joystickGetDigital(1, 5, JOY_DOWN))
-		{
-			armPower(-127);
-		}
-		else
-		{
-			armPower(0);
-		}
-
-		if(joystickGetDigital(1, 6, JOY_UP))
-		{
-			clawPower(127);
-		}
-		else if(joystickGetDigital(1, 6, JOY_DOWN))
-		{
-			clawPower(-127);
-		}
-		else
-		{
-			clawPower(0);
-		}
-		*/
+		
 		delay(20);
 	}
 }

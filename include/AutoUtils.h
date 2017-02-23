@@ -10,9 +10,9 @@
 #define ARM_MOTOR_TOP 4
 #define CLAW_MOTOR 8
 
-#define CLAW_REST 120
-#define CLAW_GROUND -45
-#define CLAW_BACK 300
+#define CLAW_REST 180
+#define CLAW_GROUND -30
+#define CLAW_BACK 360
 #define CLAW_RELEASE_BASIC 100 //PLACE HOLDER
 
 
