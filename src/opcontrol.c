@@ -97,6 +97,7 @@ void operatorControl()
 
 
 	bool pick_up = false;
+	bool pick_up_cube = false;
 	bool toss = false;
 	bool claw_overide = false;
 	bool arm_override = false;
@@ -109,12 +110,20 @@ void operatorControl()
 			pickUpMacro();
 		}
 		pick_up = joystickGetDigital(1,8,JOY_DOWN);
+		
+		if(joystickGetDigital(1,8,JOY_UP) && pick_up_cube == false)
+		{
+			pickUpCubeMacro();
+		}
+		pick_up_cube = joystickGetDigital(1,8,JOY_UP);
 
 		if(joystickGetDigital(1,8,JOY_RIGHT) && toss == false)
 		{
 			tossMacro();
 		}
 		toss = joystickGetDigital(1,8,JOY_RIGHT);
+		
+		
 		
 		// manual control of arm target
 		if (!arm_override) {

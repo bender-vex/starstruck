@@ -11,7 +11,8 @@
 #define CLAW_MOTOR 8
 
 #define CLAW_REST 180
-#define CLAW_GROUND -38
+#define CLAW_GROUND -30
+#define CLAW_GROUND_CUBE 358
 #define CLAW_VERT 210
 #define CLAW_BACK 320
 #define CLAW_RELEASE_BASIC 260 //PLACE HOLDER
@@ -62,7 +63,7 @@ void setArmTarget(int target);
 
 
 
-
+void pickUpCubeMacro();
 
 void pickUpMacro();
 

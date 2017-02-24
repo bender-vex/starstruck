@@ -197,7 +197,14 @@ void armThread(void* param)
 	int power = 0;
 	while(runArmThread)
 	{
-		power = -calculatePID(arm_pid, encoderGet(e_arm));
+		if(arm_pid->target == -999)
+		{
+			power = 0;
+		}
+		else
+		{
+			power = -calculatePID(arm_pid, encoderGet(e_arm));
+		}
 		armPower(power);
 		delay(20);
 	}
@@ -226,6 +233,20 @@ void setAutoDriveMode(AutoDriveMode adm)
 	drive_mode = adm;
 }
 
+void pickUpCubeMacroThread()
+{
+	arm_macro_mutex = true;
+	delay(500);
+	setArmTarget(CLAW_GROUND_CUBE);
+	//while(joystickGetDigital(1,8,JOY_DOWN) == false) delay(40);
+	delay(1500);
+	clawPower(-127);
+	delay(750);
+	clawPower(-55);
+	setArmTarget(-999);
+	arm_macro_mutex = false;
+}
+
 void pickUpMacroThread()
 {
 	arm_macro_mutex = true;
@@ -236,7 +257,7 @@ void pickUpMacroThread()
 	clawPower(-127);
 	delay(750);
 	clawPower(-55);
-	setArmTarget(CLAW_REST);
+	setArmTarget(-999);
 	arm_macro_mutex = false;
 }
 
@@ -247,13 +268,17 @@ void tossMacroThread()
 	delay(500);
 	//while(joystickGetDigital(1,8,JOY_RIGHT) == false) delay(40);
 	delay(750);
-	setArmTarget(100);
+	setArmTarget(60);
 	waitEncoderLess(CLAW_RELEASE_BASIC,e_arm);
 	clawPower(127);
 	delay(600);
+	clawPower(-127);
+	delay(200);
 	clawPower(0);
 	arm_macro_mutex = false;
 }
+
+
 
 void tossMacro()
 {
@@ -270,6 +295,15 @@ void pickUpMacro()
 	if(arm_macro_mutex == false)
 	{
 		taskCreate(pickUpMacroThread,  TASK_DEFAULT_STACK_SIZE, NULL, TASK_PRIORITY_DEFAULT);
+	}
+}
+
+void pickUpCubeMacro()
+{
+	//TODO Make less stupid and add safety (Cant run more than 1 and cancel mode)
+	if(arm_macro_mutex == false)
+	{
+		taskCreate(pickUpCubeMacroThread,  TASK_DEFAULT_STACK_SIZE, NULL, TASK_PRIORITY_DEFAULT);
 	}
 }
 
