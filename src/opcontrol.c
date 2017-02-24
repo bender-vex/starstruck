@@ -101,13 +101,22 @@ void operatorControl()
 	bool toss = false;
 	bool claw_overide = false;
 	bool arm_override = false;
+	bool pick_up_continue = false;
 	while (1)
 	{
 		moveBase(joystickGetAnalog(1,4),joystickGetAnalog(1,3),joystickGetAnalog(1,1));
 
 		if(joystickGetDigital(1,8,JOY_DOWN) && pick_up == false)
 		{
-			pickUpMacro();
+			if(pick_up_continue == false)
+			{
+				pickUpDownMacro();	
+			}
+			else
+			{
+				pickUpUpMacro();
+			}
+			pick_up_continue = !pick_up_continue;
 		}
 		pick_up = joystickGetDigital(1,8,JOY_DOWN);
 		
@@ -127,7 +136,8 @@ void operatorControl()
 		
 		// manual control of arm target
 		if (!arm_override) {
-			if (joystickGetDigital(1, 7, JOY_UP)) {
+			if (joystickGetDigital(1, 7, JOY_UP))
+			{
 				arm_macro_mutex = true;
 				arm_pid->target += 30;
 			} else if (joystickGetDigital(1, 7, JOY_DOWN)) {

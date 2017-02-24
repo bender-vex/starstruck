@@ -238,22 +238,25 @@ void pickUpCubeMacroThread()
 	arm_macro_mutex = true;
 	delay(500);
 	setArmTarget(CLAW_GROUND_CUBE);
-	//while(joystickGetDigital(1,8,JOY_DOWN) == false) delay(40);
+
 	delay(1500);
 	clawPower(-127);
 	delay(750);
-	clawPower(-55);
+	clawPower(-110);
 	setArmTarget(-999);
 	arm_macro_mutex = false;
+	return;
 }
 
-void pickUpMacroThread()
+void pickUpDownMacroThread()
 {
 	arm_macro_mutex = true;
 	delay(500);
 	setArmTarget(CLAW_GROUND);
-	//while(joystickGetDigital(1,8,JOY_DOWN) == false) delay(40);
-	delay(1000);
+}
+
+void pickUpUpMacroThread()
+{
 	clawPower(-127);
 	delay(750);
 	clawPower(-55);
@@ -265,10 +268,9 @@ void tossMacroThread()
 {
 	arm_macro_mutex = true;
 	setArmTarget(CLAW_BACK);
-	delay(500);
-	//while(joystickGetDigital(1,8,JOY_RIGHT) == false) delay(40);
-	delay(750);
+	delay(500 + 750);
 	setArmTarget(60);
+	clawPower(-127);
 	waitEncoderLess(CLAW_RELEASE_BASIC,e_arm);
 	clawPower(127);
 	delay(600);
@@ -289,12 +291,21 @@ void tossMacro()
 	}
 }
 
-void pickUpMacro()
+void pickUpDownMacro()
 {
 	//TODO Make less stupid and add safety (Cant run more than 1 and cancel mode)
 	if(arm_macro_mutex == false)
 	{
-		taskCreate(pickUpMacroThread,  TASK_DEFAULT_STACK_SIZE, NULL, TASK_PRIORITY_DEFAULT);
+		taskCreate(pickUpDownMacroThread,  TASK_DEFAULT_STACK_SIZE, NULL, TASK_PRIORITY_DEFAULT);
+	}
+}
+
+void pickUpUpMacro()
+{
+	//TODO Make less stupid and add safety (Cant run more than 1 and cancel mode)
+	if(arm_macro_mutex == false)
+	{
+		taskCreate(pickUpUpMacroThread,  TASK_DEFAULT_STACK_SIZE, NULL, TASK_PRIORITY_DEFAULT);
 	}
 }
 

@@ -15,7 +15,7 @@
 #define CLAW_GROUND_CUBE 358
 #define CLAW_VERT 210
 #define CLAW_BACK 320
-#define CLAW_RELEASE_BASIC 260 //PLACE HOLDER
+#define CLAW_RELEASE_BASIC 240
 
 
 typedef enum {NONE = 0, ROTATION_ONLY = 1, X_ROTATION = 2, Y_ROTATION, X_ONLY, Y_ONLY} AutoDriveMode;
@@ -65,7 +65,8 @@ void setArmTarget(int target);
 
 void pickUpCubeMacro();
 
-void pickUpMacro();
+void pickUpDownMacro();
+void pickUpUpMacro();
 
 void tossMacro();
 
@@ -89,4 +90,7 @@ PIDHandle* arm_pid;
 Encoder e_right;
 Encoder e_left;
 Encoder e_arm;
+
+
+
 #endif
