@@ -3,6 +3,7 @@
 
 #include "API.h"
 
+#define LIFT_SIDE 5
 #define LIFT_TOP 7
 #define LIFT_BOTTOM 6
 

@@ -45,4 +45,6 @@ void initialize() {
 	//	print("IME failed to initialize!\n");
 	//}
 	initAutoGlobals();
+	initArmThread();
+	initHeadingThread();
 }

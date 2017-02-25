@@ -1,33 +1,4 @@
 #include "AutoUtils.h"
-#include "encoder.h"
-
-
-PIDHandle* initPID(float kp, float ki, float kd, float target, float error_cap)
-{
-	PIDHandle* handle = NULL;
-	handle = malloc(sizeof(PIDHandle));
-	memset(handle, 0, sizeof(PIDHandle));
-	handle->kp = kp;
-	handle->ki = ki;
-	handle->ki = ki;
-	handle->error_cap = error_cap;
-	handle->target = target;
-	handle->integral = 0;
-	handle->last_error = 0.0;
-	return handle;
-}
-
-void freePID(PIDHandle* handle)
-{
-	free(handle);
-}
-
-void setPIDTarget(PIDHandle* handle, float target)
-{
-	handle->integral = 0;
-	handle->target = target;
-}
-
 
 void initAutoGlobals()
 {
@@ -42,39 +13,10 @@ void initAutoGlobals()
 	e_right = encoderInit(3,4,1);//Flip to 1 for y
 	e_arm = encoderInit(5,6,1);
 	//e_back = encoderInit(7, 8, 1);
-	arm_pid = initPID(2.1,0.12,0.15,0,10);
+	arm_pid = initPID(2.1,0.12,0.0,0,5);
 	y_pid = initPID(0.5,0.0,0.0,0.0,10.0);
 	x_pid = initPID(0.5,0.0,0.0,0.0,10.0);
 	arm_macro_mutex = false;
-}
-
-float calculatePID(PIDHandle* handle, float position)
-{
-	if(handle == NULL) return 0.0;
-	float result = 0.0;
-	float pid_error = position - handle->target;
-	float derivative = 0.0;
-
-
-	//Integral
-	if( handle->ki != 0 )
-	{
-	// If we are inside controlable window then integrate the error
-	if( abs(pid_error) < handle->error_cap || handle->error_cap == 0.0)
-	  handle->integral = handle->integral + pid_error;
-	else
-	  handle->integral = 0;
-	}
-
-	// calculate the derivative
-	derivative = pid_error - handle->last_error;
-	handle->last_error  = pid_error;
-
-	//printf("%5.3f %5.3f %5.3f\n",pid_error, (handle->kp * pid_error), (handle->ki * handle->integral));
-
-	result = (handle->kp * pid_error) + (handle->ki * handle->integral) + (handle->kd * derivative);
-
-	return result;
 }
 
 void turnBase(short power)
@@ -197,7 +139,14 @@ void armThread(void* param)
 	int power = 0;
 	while(runArmThread)
 	{
-		power = -calculatePID(arm_pid, encoderGet(e_arm));
+		if(arm_pid->target == -999)
+		{
+			power = 0;
+		}
+		else
+		{
+			power = -calculatePID(arm_pid, encoderGet(e_arm));
+		}
 		armPower(power);
 		delay(20);
 	}
@@ -226,31 +175,59 @@ void setAutoDriveMode(AutoDriveMode adm)
 	drive_mode = adm;
 }
 
-void pickUpMacroThread()
+void pickUpUpCubeMacroThread()
 {
 	arm_macro_mutex = true;
-	delay(250);
-	setArmTarget(-145);
-	delay(1500);
 	clawPower(-127);
+	delay(750);
+	clawPower(-110);
+	setArmTarget(-999);
+	arm_macro_mutex = false;
+	return;
+}
+
+void pickUpDownCubeMacroThread()
+{
+	arm_macro_mutex = true;
 	delay(500);
-	clawPower(-50);
-	setArmTarget(0);
+	setArmTarget(CLAW_GROUND_CUBE);
+	arm_macro_mutex = false;
+	return;
+}
+
+void pickUpDownMacroThread()
+{
+	arm_macro_mutex = true;
+	delay(500);
+	setArmTarget(CLAW_GROUND);
+}
+
+void pickUpUpMacroThread()
+{
+	clawPower(-127);
+	delay(750);
+	clawPower(-55);
+	setArmTarget(-999);
 	arm_macro_mutex = false;
 }
 
 void tossMacroThread()
 {
 	arm_macro_mutex = true;
-	setArmTarget(250);
-	delay(1500);
-	setArmTarget(00);
-	delay(375);
+	setArmTarget(CLAW_BACK);
+	delay(500 + 750);
+	setArmTarget(60);
+	clawPower(-127);
+	waitEncoderLess(CLAW_RELEASE_BASIC,e_arm);
 	clawPower(127);
+	delay(600);
+	clawPower(-127);
 	delay(200);
 	clawPower(0);
 	arm_macro_mutex = false;
 }
+
+
 
 void tossMacro()
 {
@@ -261,12 +238,39 @@ void tossMacro()
 	}
 }
 
-void pickUpMacro()
+void pickUpDownMacro()
 {
 	//TODO Make less stupid and add safety (Cant run more than 1 and cancel mode)
 	if(arm_macro_mutex == false)
 	{
-		taskCreate(pickUpMacroThread,  TASK_DEFAULT_STACK_SIZE, NULL, TASK_PRIORITY_DEFAULT);
+		taskCreate(pickUpDownMacroThread,  TASK_DEFAULT_STACK_SIZE, NULL, TASK_PRIORITY_DEFAULT);
+	}
+}
+
+void pickUpUpMacro()
+{
+	//TODO Make less stupid and add safety (Cant run more than 1 and cancel mode)
+	if(arm_macro_mutex == false)
+	{
+		taskCreate(pickUpUpMacroThread,  TASK_DEFAULT_STACK_SIZE, NULL, TASK_PRIORITY_DEFAULT);
+	}
+}
+
+void pickUpUpCubeMacro()
+{
+	//TODO Make less stupid and add safety (Cant run more than 1 and cancel mode)
+	if(arm_macro_mutex == false)
+	{
+		taskCreate(pickUpUpCubeMacroThread,  TASK_DEFAULT_STACK_SIZE, NULL, TASK_PRIORITY_DEFAULT);
+	}
+}
+
+void pickUpDownCubeMacro()
+{
+	//TODO Make less stupid and add safety (Cant run more than 1 and cancel mode)
+	if(arm_macro_mutex == false)
+	{
+		taskCreate(pickUpDownCubeMacroThread,  TASK_DEFAULT_STACK_SIZE, NULL, TASK_PRIORITY_DEFAULT);
 	}
 }
 
@@ -296,6 +300,17 @@ int clampI(int value, int min, int max)
 	}
 	return value;
 }
+
+void waitEncoderGreater(int value, Encoder encoder)
+{
+	while( encoderGet(encoder) < value) delay(50);
+}
+
+void waitEncoderLess(int value, Encoder encoder)
+{
+	while( encoderGet(encoder) > value) delay(50);
+}
+
 
 void setXTarget(int target)
 {
