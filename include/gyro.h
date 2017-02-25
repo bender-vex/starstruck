@@ -1,3 +1,7 @@
+/** \file gyro.h
+ * \brief Constants related to the gyro
+ */
+
 #ifndef _GYRO_H_
 #define _GYRO_H_
 
