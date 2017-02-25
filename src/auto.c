@@ -32,6 +32,9 @@ void autoPrimary()
 {
 
 	//Throw preload
+	
+	
+	
 	//Grab and toss side fence 1
 	//grab and toss mid cude
 	//grab and Toss mid-back stars

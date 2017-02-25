@@ -5,6 +5,7 @@
 #include <API.h>
 #include <string.h>
 #include <drive.h>
+#include "PID.h"
 
 #define ARM_MOTOR_BOTTOM 3
 #define ARM_MOTOR_TOP 4
@@ -20,16 +21,6 @@
 
 typedef enum {NONE = 0, ROTATION_ONLY = 1, X_ROTATION = 2, Y_ROTATION, X_ONLY, Y_ONLY} AutoDriveMode;
 
-typedef struct
-{
-	float kp; // P constant
-	float ki; // I constant
-	float kd; // D constant
-	float target; //The value we want to reach
-	float last_error;
-	float error_cap;
-	float integral;
-} PIDHandle;
 
 
 char runHeadingThread;
@@ -47,13 +38,6 @@ void resetEncoders();
 void moveX(int distance);
 void moveY(int distance);
 
-
-PIDHandle* initPID(float kp, float ki, float kd, float target, float error_cap);
-void setPIDTarget(PIDHandle* handle, float target);
-void freePID(PIDHandle* handle);
-float calculatePID(PIDHandle* handle, float position);
-
-
 void turnBase(short power);
 void moveBase(short x, short y, short r);
 void armPower(int power);
@@ -63,7 +47,8 @@ void setArmTarget(int target);
 
 
 
-void pickUpCubeMacro();
+void pickUpUpCubeMacro();
+void pickUpDownCubeMacro();
 
 void pickUpDownMacro();
 void pickUpUpMacro();

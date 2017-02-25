@@ -102,6 +102,7 @@ void operatorControl()
 	bool claw_overide = false;
 	bool arm_override = false;
 	bool pick_up_continue = false;
+	bool pick_up_cube_continue = false;
 	while (1)
 	{
 		moveBase(joystickGetAnalog(1,4),joystickGetAnalog(1,3),joystickGetAnalog(1,1));
@@ -122,7 +123,15 @@ void operatorControl()
 		
 		if(joystickGetDigital(1,8,JOY_UP) && pick_up_cube == false)
 		{
-			pickUpCubeMacro();
+			if(pick_up_cube_continue == false)
+			{
+				pickUpDownCubeMacro();	
+			}
+			else
+			{
+				pickUpUpCubeMacro();
+			}
+			pick_up_cube_continue = !pick_up_cube_continue;
 		}
 		pick_up_cube = joystickGetDigital(1,8,JOY_UP);
 
