@@ -49,6 +49,7 @@
 #include "encoder.h"
 #include "gyro.h"
 #include "drive.h"
+#include "lift.h"
 #include "AutoUtils.h"
 
 // Allow usage of this file in C++ programs
