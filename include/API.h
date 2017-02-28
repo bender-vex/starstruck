@@ -112,7 +112,7 @@ int joystickGetAnalog(unsigned char joystick, unsigned char axis);
  * JOY_RIGHT for groups 5 or 6 will cause an undefined value to be returned
  */
 bool joystickGetDigital(unsigned char joystick, unsigned char buttonGroup,
-	unsigned char button);
+                        unsigned char button);
 /**
  * Returns the backup battery voltage in millivolts.
  *
@@ -1163,7 +1163,7 @@ void lcdInit(FILE *lcdPort);
 void lcdPrint(FILE *lcdPort, unsigned char line, const char *formatString, ...);
 #else
 void __attribute__ ((format (printf, 3, 4))) lcdPrint(FILE *lcdPort, unsigned char line,
-	const char *formatString, ...);
+        const char *formatString, ...);
 #endif
 /**
  * Reads the user button status from the LCD display.
@@ -1317,7 +1317,7 @@ typedef void (*TaskCode)(void *);
  * @return a handle to the created task, or NULL if an error occurred
  */
 TaskHandle taskCreate(TaskCode taskCode, const unsigned int stackDepth, void *parameters,
-	const unsigned int priority);
+                      const unsigned int priority);
 /**
  * Delays the current task for a given number of milliseconds.
  *

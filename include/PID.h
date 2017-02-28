@@ -6,8 +6,7 @@
 #include <string.h>
 #include <drive.h>
 
-typedef struct
-{
+typedef struct {
 	float kp; // P constant
 	float ki; // I constant
 	float kd; // D constant

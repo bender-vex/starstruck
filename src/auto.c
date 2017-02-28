@@ -28,13 +28,12 @@
  */
 
 //The main auto
-void autoPrimary()
-{
+void autoPrimary() {
 
 	//Throw preload
-	
-	
-	
+
+
+
 	//Grab and toss side fence 1
 	//grab and toss mid cude
 	//grab and Toss mid-back stars
@@ -42,17 +41,15 @@ void autoPrimary()
 	//grab and toss partner preload
 	//grab and toss side fence 2
 	//sweep field for enemy stars then toss
-	
+
 }
 
 //Used when the enemy goes for the first fence
-void autoAvoid()
-{
+void autoAvoid() {
 
 }
 
- 
- 
-void autonomous()
-{
+
+
+void autonomous() {
 }
