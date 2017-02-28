@@ -1,1 +1,1 @@
-astyle --suffix=none --style=attach --indent=tab --recursive ../../*.c ../../*.h
+astyle --suffix=none --style=attach --indent=tab --recursive ../../*.c ../../*.h ../../*.cpp

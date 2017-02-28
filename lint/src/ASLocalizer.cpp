@@ -44,21 +44,21 @@
 #include "ASLocalizer.h"
 
 #ifdef _WIN32
-	#include <windows.h>
+#include <windows.h>
 #endif
 
 #ifdef __DMC__
-	#include <locale.h>
-	// digital mars doesn't have these
-	const size_t SUBLANG_CHINESE_MACAU = 5;
-	const size_t LANG_HINDI = 57;
+#include <locale.h>
+// digital mars doesn't have these
+const size_t SUBLANG_CHINESE_MACAU = 5;
+const size_t LANG_HINDI = 57;
 #endif
 
 #ifdef __VMS
-	#define __USE_STD_IOSTREAM 1
-	#include <assert>
+#define __USE_STD_IOSTREAM 1
+#include <assert>
 #else
-	#include <cassert>
+#include <cassert>
 #endif
 
 #include <cstdio>
@@ -67,17 +67,17 @@
 #include <typeinfo>
 
 #ifdef _MSC_VER
-	#pragma warning(disable: 4996)  // secure version deprecation warnings
-	// #pragma warning(disable: 4267)  // 64 bit signed/unsigned loss of data
+#pragma warning(disable: 4996)  // secure version deprecation warnings
+// #pragma warning(disable: 4267)  // 64 bit signed/unsigned loss of data
 #endif
 
 #ifdef __BORLANDC__
-	#pragma warn -8104	    // Local Static with constructor dangerous for multi-threaded apps
+#pragma warn -8104	    // Local Static with constructor dangerous for multi-threaded apps
 #endif
 
 #ifdef __INTEL_COMPILER
-	#pragma warning(disable:  383)  // value copied to temporary, reference to temporary used
-	#pragma warning(disable:  981)  // operands are evaluated in unspecified order
+#pragma warning(disable:  383)  // value copied to temporary, reference to temporary used
+#pragma warning(disable:  981)  // operands are evaluated in unspecified order
 #endif
 
 namespace astyle {
@@ -105,8 +105,7 @@ ASLocalizer::ASLocalizer()
 	// setlocale() will use the LANG environment variable on Linux.
 
 	char* localeName = setlocale(LC_ALL, "");
-	if (localeName == NULL)		// use the english (ascii) defaults
-	{
+	if (localeName == NULL) {	// use the english (ascii) defaults
 		fprintf(stderr, "\n%s\n\n", "Cannot set native locale, reverting to English");
 		setTranslationClass();
 		return;
@@ -128,8 +127,7 @@ ASLocalizer::~ASLocalizer()
 
 #ifdef _WIN32
 
-struct WinLangCode
-{
+struct WinLangCode {
 	size_t winLang;
 	char canonicalLang[3];
 };
@@ -170,16 +168,13 @@ void ASLocalizer::setLanguageFromLCID(size_t lcid)
 	size_t sublang = SUBLANGID(LANGIDFROMLCID(m_lcid));
 	// find language in the wlc table
 	size_t count = sizeof(wlc) / sizeof(wlc[0]);
-	for (size_t i = 0; i < count; i++)
-	{
-		if (wlc[i].winLang == lang)
-		{
+	for (size_t i = 0; i < count; i++) {
+		if (wlc[i].winLang == lang) {
 			m_langID = wlc[i].canonicalLang;
 			break;
 		}
 	}
-	if (m_langID == "zh")
-	{
+	if (m_langID == "zh") {
 		if (sublang == SUBLANG_CHINESE_SIMPLIFIED || sublang == SUBLANG_CHINESE_SINGAPORE)
 			m_subLangID = "CHS";
 		else
@@ -231,8 +226,7 @@ void ASLocalizer::setLanguageFromName(const char* langID)
 	m_langID = langStr.substr(0, LEN_LANG);
 
 	// need the sublang for chinese
-	if (m_langID == "zh" && langStr[LEN_LANG] == '_')
-	{
+	if (m_langID == "zh" && langStr[LEN_LANG] == '_') {
 		string subLang = langStr.substr(LEN_LANG + 1, LEN_LANG);
 		if (subLang == "CN" || subLang == "SG")
 			m_subLangID = "CHS";
@@ -257,8 +251,7 @@ void ASLocalizer::setTranslationClass()
 {
 	assert(m_langID.length());
 	// delete previously set (--ascii option)
-	if (m_translation)
-	{
+	if (m_translation) {
 		delete m_translation;
 		m_translation = NULL;
 	}
@@ -318,10 +311,8 @@ string Translation::convertToMultiByte(const wstring &wideStr) const
 	static bool msgDisplayed = false;
 	// get length of the output excluding the NULL and validate the parameters
 	size_t mbLen = wcstombs(NULL, wideStr.c_str(), 0);
-	if (mbLen == string::npos)
-	{
-		if (!msgDisplayed)
-		{
+	if (mbLen == string::npos) {
+		if (!msgDisplayed) {
 			fprintf(stderr, "\n%s\n\n", "Cannot convert to multi-byte string, reverting to English");
 			msgDisplayed = true;
 		}
@@ -329,10 +320,8 @@ string Translation::convertToMultiByte(const wstring &wideStr) const
 	}
 	// convert the characters
 	char* mbStr = new(nothrow) char[mbLen + 1];
-	if (mbStr == NULL)
-	{
-		if (!msgDisplayed)
-		{
+	if (mbStr == NULL) {
+		if (!msgDisplayed) {
 			fprintf(stderr, "\n%s\n\n", "Bad memory alloc for multi-byte string, reverting to English");
 			msgDisplayed = true;
 		}
@@ -354,10 +343,8 @@ size_t Translation::getTranslationVectorSize() const
 bool Translation::getWideTranslation(const string &stringIn, wstring &wideOut) const
 // Get the wide translation string. Used for testing.
 {
-	for (size_t i = 0; i < m_translation.size(); i++)
-	{
-		if (m_translation[i].first == stringIn)
-		{
+	for (size_t i = 0; i < m_translation.size(); i++) {
+		if (m_translation[i].first == stringIn) {
 			wideOut = m_translation[i].second;
 			return true;
 		}
@@ -374,10 +361,8 @@ string &Translation::translate(const string &stringIn) const
 {
 	static string mbTranslation;
 	mbTranslation.clear();
-	for (size_t i = 0; i < m_translation.size(); i++)
-	{
-		if (m_translation[i].first == stringIn)
-		{
+	for (size_t i = 0; i < m_translation.size(); i++) {
+		if (m_translation[i].first == stringIn) {
 			mbTranslation = convertToMultiByte(m_translation[i].second);
 			break;
 		}
@@ -393,8 +378,7 @@ string &Translation::translate(const string &stringIn) const
 // These classes have only a constructor which builds the language vector.
 //----------------------------------------------------------------------------
 
-ChineseSimplified::ChineseSimplified()	// 中文（简体）
-{
+ChineseSimplified::ChineseSimplified() {	// 中文（简体）
 	addPair("Formatted  %s\n", L"格式化  %s\n");		// should align with unchanged
 	addPair("Unchanged  %s\n", L"未改变  %s\n");		// should align with formatted
 	addPair("Directory  %s\n", L"目录  %s\n");
@@ -423,8 +407,7 @@ ChineseSimplified::ChineseSimplified()	// 中文（简体）
 	addPair("\nArtistic Style has terminated", L"\nArtistic Style 已经终止运行");
 }
 
-ChineseTraditional::ChineseTraditional()	// 中文（繁體）
-{
+ChineseTraditional::ChineseTraditional() {	// 中文（繁體）
 	addPair("Formatted  %s\n", L"格式化  %s\n");		// should align with unchanged
 	addPair("Unchanged  %s\n", L"未改變  %s\n");		// should align with formatted
 	addPair("Directory  %s\n", L"目錄  %s\n");
@@ -645,8 +628,7 @@ Italian::Italian()	// Italiano
 	addPair("\nArtistic Style has terminated", L"\nArtistic Style ha terminato");
 }
 
-Japanese::Japanese()	// 日本
-{
+Japanese::Japanese() {	// 日本
 	addPair("Formatted  %s\n", L"フォーマット  %s\n");		// should align with unchanged
 	addPair("Unchanged  %s\n", L"変更          %s\n");		// should align with formatted
 	addPair("Directory  %s\n", L"ディレクトリ  %s\n");
@@ -675,8 +657,7 @@ Japanese::Japanese()	// 日本
 	addPair("\nArtistic Style has terminated", L"\nArtistic Style 実行が終了しました");
 }
 
-Korean::Korean()	// 한국의
-{
+Korean::Korean() {	// 한국의
 	addPair("Formatted  %s\n", L"수정됨    %s\n");		// should align with unchanged
 	addPair("Unchanged  %s\n", L"변경없음  %s\n");		// should align with formatted
 	addPair("Directory  %s\n", L"디렉토리  %s\n");
