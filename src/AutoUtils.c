@@ -198,7 +198,6 @@ void pickUpDownCubeMacroThread()
 void pickUpDownMacroThread()
 {
 	arm_macro_mutex = true;
-	delay(500);
 	setArmTarget(CLAW_GROUND);
 }
 
@@ -272,6 +271,30 @@ void pickUpDownCubeMacro()
 	{
 		taskCreate(pickUpDownCubeMacroThread,  TASK_DEFAULT_STACK_SIZE, NULL, TASK_PRIORITY_DEFAULT);
 	}
+}
+
+void clearFence() {
+	pushFenceStar();// first star
+	for (int i = 0; i < 2; i++){
+		moveY(-33);// back up
+		delay(300);
+		moveX(-33);// move toward next star
+		delay(300);
+		moveY(33);// move into star
+		delay(300);
+		pushFenceStar();
+	}
+}
+
+void pushFenceStar() {
+	clawPower(-64);// close the claw a little
+	delay(300);
+	clawPower(0);
+	moveY(33);// push star forward
+	delay(300);
+	clawPower(64);
+	delay(300);// open claw
+	clawPower(0);
 }
 
 
