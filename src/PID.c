@@ -3,8 +3,7 @@
 #include "PID.h"
 
 
-PIDHandle* initPID(float kp, float ki, float kd, float target, float error_cap)
-{
+PIDHandle* initPID(float kp, float ki, float kd, float target, float error_cap) {
 	PIDHandle* handle = NULL;
 	handle = malloc(sizeof(PIDHandle));
 	memset(handle, 0, sizeof(PIDHandle));
@@ -18,19 +17,16 @@ PIDHandle* initPID(float kp, float ki, float kd, float target, float error_cap)
 	return handle;
 }
 
-void freePID(PIDHandle* handle)
-{
+void freePID(PIDHandle* handle) {
 	free(handle);
 }
 
-void setPIDTarget(PIDHandle* handle, float target)
-{
+void setPIDTarget(PIDHandle* handle, float target) {
 	handle->integral = 0;
 	handle->target = target;
 }
 
-float calculatePID(PIDHandle* handle, float position)
-{
+float calculatePID(PIDHandle* handle, float position) {
 	if(handle == NULL) return 0.0;
 	float result = 0.0;
 	float pid_error = position - handle->target;
@@ -38,13 +34,12 @@ float calculatePID(PIDHandle* handle, float position)
 
 
 	//Integral
-	if( handle->ki != 0 )
-	{
-	// If we are inside controlable window then integrate the error
-	if( abs(pid_error) < handle->error_cap || handle->error_cap == 0.0)
-	  handle->integral = handle->integral + pid_error;
-	else
-	  handle->integral = 0;
+	if( handle->ki != 0 ) {
+		// If we are inside controlable window then integrate the error
+		if( abs(pid_error) < handle->error_cap || handle->error_cap == 0.0)
+			handle->integral = handle->integral + pid_error;
+		else
+			handle->integral = 0;
 	}
 
 	// calculate the derivative

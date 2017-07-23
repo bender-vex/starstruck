@@ -174,8 +174,7 @@ const string ASResource::AS_NS_HANDLER = string("NS_HANDLER");
  *
  * @param a and b, the string pointers to be compared.
  */
-bool sortOnLength(const string* a, const string* b)
-{
+bool sortOnLength(const string* a, const string* b) {
 	return (*a).length() > (*b).length();
 }
 
@@ -185,8 +184,7 @@ bool sortOnLength(const string* a, const string* b)
  *
  * @param a and b, the string pointers to be compared.
  */
-bool sortOnName(const string* a, const string* b)
-{
+bool sortOnName(const string* a, const string* b) {
 	return *a < *b;
 }
 
@@ -196,8 +194,7 @@ bool sortOnName(const string* a, const string* b)
  *
  * @param assignmentOperators   a reference to the vector to be built.
  */
-void ASResource::buildAssignmentOperators(vector<const string*>* assignmentOperators)
-{
+void ASResource::buildAssignmentOperators(vector<const string*>* assignmentOperators) {
 	assignmentOperators->push_back(&AS_ASSIGN);
 	assignmentOperators->push_back(&AS_PLUS_ASSIGN);
 	assignmentOperators->push_back(&AS_MINUS_ASSIGN);
@@ -225,8 +222,7 @@ void ASResource::buildAssignmentOperators(vector<const string*>* assignmentOpera
  *
  * @param castOperators     a reference to the vector to be built.
  */
-void ASResource::buildCastOperators(vector<const string*>* castOperators)
-{
+void ASResource::buildCastOperators(vector<const string*>* castOperators) {
 	castOperators->push_back(&AS_CONST_CAST);
 	castOperators->push_back(&AS_DYNAMIC_CAST);
 	castOperators->push_back(&AS_REINTERPRET_CAST);
@@ -239,8 +235,7 @@ void ASResource::buildCastOperators(vector<const string*>* castOperators)
  *
  * @param headers       a reference to the vector to be built.
  */
-void ASResource::buildHeaders(vector<const string*>* headers, int fileType, bool beautifier)
-{
+void ASResource::buildHeaders(vector<const string*>* headers, int fileType, bool beautifier) {
 	headers->push_back(&AS_IF);
 	headers->push_back(&AS_ELSE);
 	headers->push_back(&AS_FOR);
@@ -256,20 +251,17 @@ void ASResource::buildHeaders(vector<const string*>* headers, int fileType, bool
 	headers->push_back(&AS_FOREACH);		// QT & C#
 	headers->push_back(&AS_FOREVER);		// Qt & Boost
 
-	if (fileType == C_TYPE)
-	{
+	if (fileType == C_TYPE) {
 		headers->push_back(&_AS_TRY);		// __try
 		headers->push_back(&_AS_FINALLY);	// __finally
 		headers->push_back(&_AS_EXCEPT);	// __except
 	}
-	if (fileType == JAVA_TYPE)
-	{
+	if (fileType == JAVA_TYPE) {
 		headers->push_back(&AS_FINALLY);
 		headers->push_back(&AS_SYNCHRONIZED);
 	}
 
-	if (fileType == SHARP_TYPE)
-	{
+	if (fileType == SHARP_TYPE) {
 		headers->push_back(&AS_FINALLY);
 		headers->push_back(&AS_LOCK);
 		headers->push_back(&AS_FIXED);
@@ -279,15 +271,12 @@ void ASResource::buildHeaders(vector<const string*>* headers, int fileType, bool
 		headers->push_back(&AS_REMOVE);
 	}
 
-	if (beautifier)
-	{
-		if (fileType == C_TYPE)
-		{
+	if (beautifier) {
+		if (fileType == C_TYPE) {
 			headers->push_back(&AS_TEMPLATE);
 		}
 
-		if (fileType == JAVA_TYPE)
-		{
+		if (fileType == JAVA_TYPE) {
 			headers->push_back(&AS_STATIC);         // for static constructor
 		}
 	}
@@ -300,8 +289,7 @@ void ASResource::buildHeaders(vector<const string*>* headers, int fileType, bool
  *
  * @param indentableHeaders     a reference to the vector to be built.
  */
-void ASResource::buildIndentableHeaders(vector<const string*>* indentableHeaders)
-{
+void ASResource::buildIndentableHeaders(vector<const string*>* indentableHeaders) {
 	indentableHeaders->push_back(&AS_RETURN);
 
 	sort(indentableHeaders->begin(), indentableHeaders->end(), sortOnName);
@@ -313,11 +301,9 @@ void ASResource::buildIndentableHeaders(vector<const string*>* indentableHeaders
 *
 * @param indentableMacros       a reference to the vector to be built.
 */
-void ASResource::buildIndentableMacros(vector<const pair<const string, const string>* >* indentableMacros)
-{
+void ASResource::buildIndentableMacros(vector<const pair<const string, const string>* >* indentableMacros) {
 	// the pairs must be retained in memory
-	static const struct pair<const string, const string> macros[] =
-	{
+	static const struct pair<const string, const string> macros[] = {
 		// wxWidgets
 		make_pair("BEGIN_EVENT_TABLE", "END_EVENT_TABLE"),
 		make_pair("wxBEGIN_EVENT_TABLE", "wxEND_EVENT_TABLE"),
@@ -339,8 +325,7 @@ void ASResource::buildIndentableMacros(vector<const pair<const string, const str
  *
  * @param nonAssignmentOperators       a reference to the vector to be built.
  */
-void ASResource::buildNonAssignmentOperators(vector<const string*>* nonAssignmentOperators)
-{
+void ASResource::buildNonAssignmentOperators(vector<const string*>* nonAssignmentOperators) {
 	nonAssignmentOperators->push_back(&AS_EQUAL);
 	nonAssignmentOperators->push_back(&AS_PLUS_PLUS);
 	nonAssignmentOperators->push_back(&AS_MINUS_MINUS);
@@ -366,8 +351,7 @@ void ASResource::buildNonAssignmentOperators(vector<const string*>* nonAssignmen
  *
  * @param nonParenHeaders       a reference to the vector to be built.
  */
-void ASResource::buildNonParenHeaders(vector<const string*>* nonParenHeaders, int fileType, bool beautifier)
-{
+void ASResource::buildNonParenHeaders(vector<const string*>* nonParenHeaders, int fileType, bool beautifier) {
 	nonParenHeaders->push_back(&AS_ELSE);
 	nonParenHeaders->push_back(&AS_DO);
 	nonParenHeaders->push_back(&AS_TRY);
@@ -377,18 +361,15 @@ void ASResource::buildNonParenHeaders(vector<const string*>* nonParenHeaders, in
 	nonParenHeaders->push_back(&AS_QFOREVER);	// QT
 	nonParenHeaders->push_back(&AS_FOREVER);	// Boost
 
-	if (fileType == C_TYPE)
-	{
+	if (fileType == C_TYPE) {
 		nonParenHeaders->push_back(&_AS_TRY);		// __try
 		nonParenHeaders->push_back(&_AS_FINALLY);	// __finally
 	}
-	if (fileType == JAVA_TYPE)
-	{
+	if (fileType == JAVA_TYPE) {
 		nonParenHeaders->push_back(&AS_FINALLY);
 	}
 
-	if (fileType == SHARP_TYPE)
-	{
+	if (fileType == SHARP_TYPE) {
 		nonParenHeaders->push_back(&AS_FINALLY);
 		nonParenHeaders->push_back(&AS_GET);
 		nonParenHeaders->push_back(&AS_SET);
@@ -396,14 +377,11 @@ void ASResource::buildNonParenHeaders(vector<const string*>* nonParenHeaders, in
 		nonParenHeaders->push_back(&AS_REMOVE);
 	}
 
-	if (beautifier)
-	{
-		if (fileType == C_TYPE)
-		{
+	if (beautifier) {
+		if (fileType == C_TYPE) {
 			nonParenHeaders->push_back(&AS_TEMPLATE);
 		}
-		if (fileType == JAVA_TYPE)
-		{
+		if (fileType == JAVA_TYPE) {
 			nonParenHeaders->push_back(&AS_STATIC);
 		}
 	}
@@ -416,8 +394,7 @@ void ASResource::buildNonParenHeaders(vector<const string*>* nonParenHeaders, in
  *
  * @param operators             a reference to the vector to be built.
  */
-void ASResource::buildOperators(vector<const string*>* operators, int fileType)
-{
+void ASResource::buildOperators(vector<const string*>* operators, int fileType) {
 	operators->push_back(&AS_PLUS_ASSIGN);
 	operators->push_back(&AS_MINUS_ASSIGN);
 	operators->push_back(&AS_MULT_ASSIGN);
@@ -461,8 +438,7 @@ void ASResource::buildOperators(vector<const string*>* operators, int fileType)
 	operators->push_back(&AS_BIT_AND);
 	operators->push_back(&AS_BIT_NOT);
 	operators->push_back(&AS_BIT_XOR);
-	if (fileType == C_TYPE)
-	{
+	if (fileType == C_TYPE) {
 		operators->push_back(&AS_GCC_MIN_ASSIGN);
 		operators->push_back(&AS_GCC_MAX_ASSIGN);
 	}
@@ -476,22 +452,18 @@ void ASResource::buildOperators(vector<const string*>* operators, int fileType)
  *
  * @param preBlockStatements        a reference to the vector to be built.
  */
-void ASResource::buildPreBlockStatements(vector<const string*>* preBlockStatements, int fileType)
-{
+void ASResource::buildPreBlockStatements(vector<const string*>* preBlockStatements, int fileType) {
 	preBlockStatements->push_back(&AS_CLASS);
-	if (fileType == C_TYPE)
-	{
+	if (fileType == C_TYPE) {
 		preBlockStatements->push_back(&AS_STRUCT);
 		preBlockStatements->push_back(&AS_UNION);
 		preBlockStatements->push_back(&AS_NAMESPACE);
 	}
-	if (fileType == JAVA_TYPE)
-	{
+	if (fileType == JAVA_TYPE) {
 		preBlockStatements->push_back(&AS_INTERFACE);
 		preBlockStatements->push_back(&AS_THROWS);
 	}
-	if (fileType == SHARP_TYPE)
-	{
+	if (fileType == SHARP_TYPE) {
 		preBlockStatements->push_back(&AS_INTERFACE);
 		preBlockStatements->push_back(&AS_NAMESPACE);
 		preBlockStatements->push_back(&AS_WHERE);
@@ -509,10 +481,8 @@ void ASResource::buildPreBlockStatements(vector<const string*>* preBlockStatemen
  * the closing paren and the opening bracket.
  * e.g. in "void foo() const {}", "const" is a preCommandHeader.
  */
-void ASResource::buildPreCommandHeaders(vector<const string*>* preCommandHeaders, int fileType)
-{
-	if (fileType == C_TYPE)
-	{
+void ASResource::buildPreCommandHeaders(vector<const string*>* preCommandHeaders, int fileType) {
+	if (fileType == C_TYPE) {
 		preCommandHeaders->push_back(&AS_CONST);
 		preCommandHeaders->push_back(&AS_VOLATILE);
 		preCommandHeaders->push_back(&AS_INTERRUPT);
@@ -522,13 +492,11 @@ void ASResource::buildPreCommandHeaders(vector<const string*>* preCommandHeaders
 		preCommandHeaders->push_back(&AS_AUTORELEASEPOOL);	// Obj-C only
 	}
 
-	if (fileType == JAVA_TYPE)
-	{
+	if (fileType == JAVA_TYPE) {
 		preCommandHeaders->push_back(&AS_THROWS);
 	}
 
-	if (fileType == SHARP_TYPE)
-	{
+	if (fileType == SHARP_TYPE) {
 		preCommandHeaders->push_back(&AS_WHERE);
 	}
 
@@ -543,21 +511,17 @@ void ASResource::buildPreCommandHeaders(vector<const string*>* preCommandHeaders
  *
  * @param preDefinitionHeaders      a reference to the vector to be built.
  */
-void ASResource::buildPreDefinitionHeaders(vector<const string*>* preDefinitionHeaders, int fileType)
-{
+void ASResource::buildPreDefinitionHeaders(vector<const string*>* preDefinitionHeaders, int fileType) {
 	preDefinitionHeaders->push_back(&AS_CLASS);
-	if (fileType == C_TYPE)
-	{
+	if (fileType == C_TYPE) {
 		preDefinitionHeaders->push_back(&AS_STRUCT);
 		preDefinitionHeaders->push_back(&AS_UNION);
 		preDefinitionHeaders->push_back(&AS_NAMESPACE);
 	}
-	if (fileType == JAVA_TYPE)
-	{
+	if (fileType == JAVA_TYPE) {
 		preDefinitionHeaders->push_back(&AS_INTERFACE);
 	}
-	if (fileType == SHARP_TYPE)
-	{
+	if (fileType == SHARP_TYPE) {
 		preDefinitionHeaders->push_back(&AS_STRUCT);
 		preDefinitionHeaders->push_back(&AS_INTERFACE);
 		preDefinitionHeaders->push_back(&AS_NAMESPACE);
@@ -570,8 +534,7 @@ void ASResource::buildPreDefinitionHeaders(vector<const string*>* preDefinitionH
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 // check if a specific line position contains a keyword.
-bool ASBase::findKeyword(const string &line, int i, const string &keyword) const
-{
+bool ASBase::findKeyword(const string &line, int i, const string &keyword) const {
 	assert(isCharPotentialHeader(line, i));
 	// check the word
 	const size_t keywordLength = keyword.length();
@@ -594,13 +557,11 @@ bool ASBase::findKeyword(const string &line, int i, const string &keyword) const
 
 // get the current word on a line
 // index must point to the beginning of the word
-string ASBase::getCurrentWord(const string &line, size_t index) const
-{
+string ASBase::getCurrentWord(const string &line, size_t index) const {
 	assert(isCharPotentialHeader(line, index));
 	size_t lineLength = line.length();
 	size_t i;
-	for (i = index; i < lineLength; i++)
-	{
+	for (i = index; i < lineLength; i++) {
 		if (!isLegalNameChar(line[i]))
 			break;
 	}
