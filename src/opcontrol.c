@@ -35,8 +35,8 @@ void operatorControl()
 
 	setAutoDriveMode(NONE);
 	//initHeadingThread();
-	/*delay(5000);
-	moveY(400);
+	//delay(5000);
+	/*moveY(400);
 	delay(3000);
 	moveY(-400);
 	delay(3000);
@@ -111,7 +111,7 @@ void operatorControl()
 		{
 			if(pick_up_continue == false)
 			{
-				pickUpDownMacro();	
+				pickUpDownMacro();
 			}
 			else
 			{
@@ -120,12 +120,12 @@ void operatorControl()
 			pick_up_continue = !pick_up_continue;
 		}
 		pick_up = joystickGetDigital(1,8,JOY_DOWN);
-		
+
 		if(joystickGetDigital(1,8,JOY_UP) && pick_up_cube == false)
 		{
 			if(pick_up_cube_continue == false)
 			{
-				pickUpDownCubeMacro();	
+				pickUpDownCubeMacro();
 			}
 			else
 			{
@@ -135,14 +135,14 @@ void operatorControl()
 		}
 		pick_up_cube = joystickGetDigital(1,8,JOY_UP);
 
-		if(joystickGetDigital(1,8,JOY_RIGHT) && toss == false)
+		if(joystickGetDigital(1,8,JOY_RIGHT) && toss == false && pick_up_continue == false)
 		{
 			tossMacro();
 		}
 		toss = joystickGetDigital(1,8,JOY_RIGHT);
-		
-		
-		
+
+
+
 		// manual control of arm target
 		if (!arm_override) {
 			if (joystickGetDigital(1, 7, JOY_UP))
@@ -157,7 +157,7 @@ void operatorControl()
 			}
 		}
 		arm_override = joystickGetDigital(1, 7, JOY_UP) | joystickGetDigital(1, 7, JOY_DOWN);
-		
+
 		//claw_overide
 		if(joystickGetDigital(1, 6, JOY_UP))
 		{
@@ -174,15 +174,15 @@ void operatorControl()
 			claw_overide = false;
 			clawPower(0);
 		}
-		
-		
+
+
 		// move lift with up and down buttons in button group 5
 		if (joystickGetDigital(1, 5, JOY_UP)) {
 			liftPower(64);
 		} else {
 			liftPower(-64 * joystickGetDigital(1, 5, JOY_DOWN));
 		}
-		
+
 		delay(20);
 	}
 }

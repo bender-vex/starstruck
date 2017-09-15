@@ -12,7 +12,43 @@
 
 #include "main.h"
 
-/*
+/// The main auto
+void autoPrimary()
+{
+	clawPower(-25);
+	delay(500);
+	clawPower(0);
+	setArmTarget(120);
+	moveY(1700);
+	delay(4000);
+	clawPower(-64);
+	delay(500);
+	clawPower(0);
+	moveX(1000);
+	delay(1500);
+	setAutoDriveMode(NONE);
+}
+
+/// Sweep stars off fence
+void autoFenceSweep()
+{
+	setHeading(180);
+	delay(800);
+	moveX(500);
+	delay(1000);
+	moveY(-1300);
+	delay(1000);
+	clawPower(-20);
+	delay(500);
+	clawPower(0);
+	setArmTarget(250);
+	delay(1000);
+	moveX(1500);
+	delay(1500);
+}
+
+
+ /*
  * Runs the user autonomous code. This function will be started in its own task with the default
  * priority and stack size whenever the robot is enabled via the Field Management System or the
  * VEX Competition Switch in the autonomous mode. If the robot is disabled or communications is
@@ -26,33 +62,7 @@
  * The autonomous task may exit, unlike operatorControl() which should never exit. If it does
  * so, the robot will await a switch to another mode or disable/enable cycle.
  */
-
-//The main auto
-void autoPrimary()
-{
-
-	//Throw preload
-	
-	
-	
-	//Grab and toss side fence 1
-	//grab and toss mid cude
-	//grab and Toss mid-back stars
-	//grab and toss fence mid
-	//grab and toss partner preload
-	//grab and toss side fence 2
-	//sweep field for enemy stars then toss
-	
-}
-
-//Used when the enemy goes for the first fence
-void autoAvoid()
-{
-
-}
-
- 
- 
 void autonomous()
 {
+	autoPrimary();
 }
